@@ -31,8 +31,10 @@ function request(path, method = 'GET') {
 
 test('static server hardening', async (t) => {
   server = createForgeServer();
-  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-  port = server.address().port;
+  await new Promise((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(socketPath, resolve);
+  });
 
   await t.test('serves the editor shell with hardened headers', async () => {
     const res = await request('/');
