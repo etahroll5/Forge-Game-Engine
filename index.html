@@ -66,7 +66,19 @@
 </div><div id="toast" class="toast"></div>
 <script>
 'use strict';
-const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+// Keep the main editor entry points working even if a later UI initializer fails.
+document.addEventListener('click',function(event){
+  const button=event.target.closest('#homeContinue, #settingsEditor, #pixelEditor, [data-goto="editor"], [data-goto="events"]');
+  if(!button)return;
+  event.preventDefault();
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+  try{
+    if(button.matches('[data-goto="events"]')){showEditor();setWorkspace('eventsWorkspace');}
+    else{showEditor();if(button.matches('[data-goto="editor"]'))setWorkspace('sceneWorkspace');}
+  }catch(error){console.error('Could not open Forge editor:',error);const home=document.getElementById('homeView');const editor=document.getElementById('editorView');const toolbar=document.getElementById('editorToolbar');if(home)home.style.display='none';if(editor)editor.style.display='flex';if(toolbar)toolbar.style.display='flex';}
+},true);
+const $=s=>document.querySelector(s),$=s=>Array.from(document.querySelectorAll(s));
 const canvas=$('#scene'),ctx=canvas.getContext('2d');
 const STORAGE_KEY='forge-modern-v2',AUTOSAVE_KEY='forge-autosave-v1',SAVES_KEY='forge-saves-v1';
 let project={version:3,name:'My Forge Game',width:960,height:540,background:'#e7edf6',objs:[],actions:[],script:''};
