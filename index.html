@@ -528,4 +528,73 @@ action('labSearch',()=>{const term=prompt('Search objects by name');if(term===nu
 action('labTheme',()=>{const dark=document.body.classList.toggle('forgeLabContrast');msg(dark?'High-contrast theme enabled':'Default theme restored')});
 action('labExport',()=>{if(typeof exportPlayableHTML==='function')exportPlayableHTML(false);else $('exportPlayable')?.click()});
 })();
-</script><style>body.forgeLabContrast{--bg:#000;--panel:#07192d;--panel2:#10294a;--line:#75b9ff;--text:#fff;--muted:#fff}#forgeFeatureLab button{color:#fff;background:#195b9d;border-color:#4f9ce5}#forgeFeatureLab button:hover{background:#2779c5}</style><style>.workspace.forgeFocusLayout:not(.homeMode) .sidebar{display:none!important}.workspace.forgeFocusLayout:not(.homeMode) .center{width:100%;flex:1}body.forgeWarmTheme{--bg:#201522;--panel:#312038;--panel2:#462b50;--line:#9669ae;--mint:#d3a4ff;--purple:#efb7ff}#toolsWorkspace .card{max-width:100%!important}#toolsWorkspace button{color:#fff;background:#195b9d;border-color:#539cde}#toolsWorkspace button:hover{background:#2879c2}</style><script defer src="./creator-lab-2.js"></script><script defer src="./scene-camera.js"></script><script>document.getElementById('releaseOpenEditor')?.addEventListener('click',()=>document.getElementById('homeContinue')?.click());</script><script>(function(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(button=>{button.addEventListener('click',()=>{const target=document.getElementById(button.dataset.rail);if(target&&!target.disabled)target.click()})});function refreshRail(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(b=>b.classList.toggle('railActive',document.getElementById(b.dataset.rail)?.classList.contains('active')||false))}document.getElementById('forgeToolRail')?.addEventListener('click',refreshRail);document.querySelectorAll('.workspaceTab').forEach(b=>b.addEventListener('click',refreshRail));refreshRail()})();</script></body></html>
+</script><style>body.forgeLabContrast{--bg:#000;--panel:#07192d;--panel2:#10294a;--line:#75b9ff;--text:#fff;--muted:#fff}#forgeFeatureLab button{color:#fff;background:#195b9d;border-color:#4f9ce5}#forgeFeatureLab button:hover{background:#2779c5}</style><style>.workspace.forgeFocusLayout:not(.homeMode) .sidebar{display:none!important}.workspace.forgeFocusLayout:not(.homeMode) .center{width:100%;flex:1}body.forgeWarmTheme{--bg:#201522;--panel:#312038;--panel2:#462b50;--line:#9669ae;--mint:#d3a4ff;--purple:#efb7ff}#toolsWorkspace .card{max-width:100%!important}#toolsWorkspace button{color:#fff;background:#195b9d;border-color:#539cde}#toolsWorkspace button:hover{background:#2879c2}
+/* Forge 1.0 — Modern Violet design system (2026 refresh) */
+:root{
+ color-scheme:dark;
+ --bg:#0b0a13;--panel:#14121f;--panel2:#1d1a2c;--line:#39334f;
+ --text:#f8f5ff;--muted:#bcb5d2;--mint:#9877fa;--purple:#b9a1ff;
+ --red:#ff819e;--yellow:#ffd479;
+ font-family:Inter,"Segoe UI Variable","Segoe UI",ui-sans-serif,system-ui,sans-serif
+}
+body{background:#0b0a13;color:#f8f5ff}
+button,input,select,textarea{font-family:inherit}
+button{border:1px solid #443a60;border-radius:10px;background:#242035;color:#f8f5ff;transition:background .16s ease,border-color .16s ease,transform .16s ease,box-shadow .16s ease}
+button:hover:not(:disabled){background:#322b4b;border-color:#9e7ef7;box-shadow:0 0 0 1px #9e7ef729}
+button:active:not(:disabled){transform:translateY(1px)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #ba9cff;outline-offset:2px}
+button.primary,.primary{background:linear-gradient(125deg,#8e63f2,#6545d3)!important;color:#fff!important;border:1px solid #a98aff!important;box-shadow:0 4px 18px #6545d33b}
+button.primary:hover:not(:disabled),.primary:hover:not(:disabled){background:linear-gradient(125deg,#a57fff,#7856e8)!important;box-shadow:0 5px 22px #8053ed60}
+input,select,textarea{background:#1b1829;border:1px solid #49415f;border-radius:9px;color:#fff}
+input:focus,select:focus,textarea:focus{border-color:#a68bf9}
+label,.muted,.small{color:#c7bfdc}
+.topbar{background:#151221;border-bottom:1px solid #3c3550}
+.topbar .version,.version{background:#30224f;border:1px solid #7e5cc7;color:#eadfff;border-radius:999px;font-weight:800;letter-spacing:.06em}
+.topbar .brand span,.homeLogo span{color:#f6f1ff}
+.workspace.homeMode #homeView,.homeMode #homeView{background:radial-gradient(ellipse at 77% 4%,#6639ae35,transparent 42%),radial-gradient(ellipse at 6% 60%,#3c276e30,transparent 46%),#0b0a13!important}
+.homeNav,.workspace.homeMode .homeNav{background:#13101fe8!important;border-bottom:1px solid #41345e!important;backdrop-filter:blur(20px);box-shadow:0 6px 28px #05030c33!important}
+.homeLogo{font-weight:900;letter-spacing:-.07em;color:#f8f4ff}
+.homeLogo::after{content:"";display:inline-block;width:5px;height:5px;margin-left:4px;border-radius:50%;background:#a88aff;vertical-align:top}
+.homeNav .forgeHomeLogoVersion{background:#362451;border:1px solid #8b64d7;color:#e7d9ff;padding:5px 10px;border-radius:999px;font-size:10px;box-shadow:0 0 18px #8350e42e}
+.homeNavBtn{border-radius:10px!important}
+.homeNavBtn.active{background:#392a5d!important;border-color:#8060d1!important;color:#fff!important}
+.homeNavBtn:hover{background:#292039!important}
+.homeShell{max-width:1320px}
+.heroHome,.workspace.homeMode .heroHome{background:radial-gradient(circle at 82% 40%,#9c67ff34,transparent 37%),linear-gradient(118deg,#211638,#151125 60%,#21163b)!important;border:1px solid #654d92!important;border-radius:24px!important;box-shadow:0 20px 55px #05030d6b, inset 0 1px #ffffff16!important}
+.heroHome h1{letter-spacing:-.065em;line-height:1.06}
+.heroHome .eyebrow{color:#c9adff;letter-spacing:.16em;font-weight:850}
+.heroHome p{color:#d8cdec;line-height:1.7}
+.heroMark .logoGlyph{background:linear-gradient(145deg,#a67aff,#6344c6)!important;box-shadow:0 18px 55px #8856e65c!important;border:1px solid #b49aff}
+.homeTile,.workspace.homeMode .homeTile,.workspace.homeMode .card{background:linear-gradient(155deg,#211a33,#171322)!important;border:1px solid #46385f!important;border-radius:18px!important;box-shadow:0 9px 24px #05020d2b!important;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.homeTile:hover,.workspace.homeMode .homeTile:hover{transform:translateY(-3px);border-color:#9b7cf0!important;box-shadow:0 15px 34px #07031169!important}
+.tileIcon{background:#352650!important;color:#c5aaff!important;border-radius:13px!important}
+.homeSectionHead h2{letter-spacing:-.035em}
+.homeSectionHead p,.homeTile p,.card p{color:#cbc2de}
+.roadmapItem{background:#1c162a!important;border:1px solid #44365f!important;border-radius:14px!important}
+.roadmapStatus{background:#382656!important;color:#e3d5ff!important;border:1px solid #7455af!important;border-radius:999px!important}
+.forgeReleaseHero{background:radial-gradient(circle at 92% 0%,#8854dd40,transparent 40%),linear-gradient(125deg,#35214f,#1b1630)!important;border:1px solid #805cba!important}
+.forgeChangelog article{background:#20192f!important;border-color:#4b3c68!important}
+.forgeReleaseTag,.forgeLivePill{background:#392458!important;border-color:#8e69d0!important}
+.workspace:not(.homeMode) #forgeToolRail{background:#100e19;border-right-color:#393049}
+#forgeToolRail .railBrand{background:linear-gradient(145deg,#a67bff,#6746d3)!important;box-shadow:0 5px 15px #6746d355}
+#forgeToolRail button:hover,#forgeToolRail button.railActive{background:#392852;border-color:#8d67dc;color:#fff}
+.workspace:not(.homeMode) .sidebar.left,.workspace:not(.homeMode) .sidebar.right{background:#161320;border-color:#393249}
+.workspace:not(.homeMode) .center{background:#0f0c17}
+.workspace:not(.homeMode) .toolbar{background:#181421;border-color:#40354f}
+.workspace:not(.homeMode) .workspaceTab.active{background:#3a295a;border-color:#8f6bdb;box-shadow:inset 0 -2px 0 #b29aff}
+.workspace:not(.homeMode) #forgeSceneBar{background:#1b1628!important;border-color:#453858!important}
+.workspace:not(.homeMode) #forgeSceneBar button{background:#30263f;border-color:#534266}
+.workspace:not(.homeMode) #forgeSceneBar button:hover{background:#44305e}
+.workspace:not(.homeMode) #sceneWorkspace .stage{background-color:#100d19;background-image:radial-gradient(#393047 1px,transparent 1px)}
+.workspace:not(.homeMode) #sceneWorkspace .canvasWrap{border:1px solid #655080;box-shadow:0 18px 55px #04020899}
+.workspace:not(.homeMode) #sceneWorkspace .bottom{background:#1a1525;border-color:#443653}
+.workspace:not(.homeMode) .sideHead{background:#1d1829;border-color:#383046;color:#d7c9ec}
+.workspace:not(.homeMode) .tabs{background:#1c1728}
+.workspace:not(.homeMode) .object.active{background:#3c295e!important}
+.workspaceIntro{background:linear-gradient(110deg,#2a1e40,#161122)!important;border-color:#55406f!important}
+#toolsWorkspace .card{background:#21192f!important;border:1px solid #4d3b68!important}
+#toolsWorkspace button,#forgeFeatureLab button{background:#342548!important;color:#fff!important;border-color:#6e528f!important}
+#toolsWorkspace button:hover,#forgeFeatureLab button:hover{background:#4b3268!important;border-color:#aa80eb!important}
+#forgeCameraStatus{color:#d8c5f5!important}
+@media(prefers-reduced-motion:reduce){button,.homeTile{transition:none!important}}
+</style><script defer src="./creator-lab-2.js"></script><script defer src="./scene-camera.js"></script><script>document.getElementById('releaseOpenEditor')?.addEventListener('click',()=>document.getElementById('homeContinue')?.click());</script><script>(function(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(button=>{button.addEventListener('click',()=>{const target=document.getElementById(button.dataset.rail);if(target&&!target.disabled)target.click()})});function refreshRail(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(b=>b.classList.toggle('railActive',document.getElementById(b.dataset.rail)?.classList.contains('active')||false))}document.getElementById('forgeToolRail')?.addEventListener('click',refreshRail);document.querySelectorAll('.workspaceTab').forEach(b=>b.addEventListener('click',refreshRail));refreshRail()})();</script></body></html>
