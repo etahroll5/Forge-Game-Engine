@@ -98,6 +98,27 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .workspace.homeMode .homePage button:not(.primary){color:inherit}
 .workspace.homeMode .homePage button.primary{color:#061a2d}
 @media(max-width:760px){.workspace.homeMode .heroHome{grid-template-columns:1fr;padding:40px 22px}.workspace.homeMode .heroMark{display:none}.workspace.homeMode .homeNav{flex-wrap:wrap;padding:10px}.workspace.homeMode .homeNavRight{margin-left:0}.workspace.homeMode .homeShell{padding:0 12px}.workspace.homeMode .heroHome{margin:0 -12px}.workspace.homeMode .heroCopy h1{letter-spacing:-1px}}
+
+/* Forge typography refresh: modern system font, consistent white interface text */
+:root{--text:#fff;--muted:#fff;font-family:Inter,"Segoe UI Variable","Segoe UI",ui-sans-serif,system-ui,sans-serif}
+body,button,input,select,textarea,label,.muted,.small,.status,.sideHead,.section h3,.workspaceEyebrow,.version,.pill{color:#fff}
+button,input,select,textarea{font-family:inherit}
+button.primary,.primary{color:#fff;background:#1768c9;border-color:#4ba2ff}
+button.primary:hover,.primary:hover{color:#fff;background:#2584ec}
+.workspace.homeMode #homeView{color:#fff;background:#0b1c31}
+.workspace.homeMode .homeNav{background:#0e2845;border-color:#305a83}
+.workspace.homeMode .homeLogo,.workspace.homeMode .homeLogo span,.workspace.homeMode .homeNavBtn,.workspace.homeMode .homeNavBtn.active{color:#fff}
+.workspace.homeMode .homeNavBtn.active,.workspace.homeMode .homeNavBtn:hover{background:#1c4a7c;color:#fff}
+.workspace.homeMode .heroCopy p,.workspace.homeMode .heroCopy .eyebrow{color:#fff}
+.workspace.homeMode .heroActions .primary{background:#155eae;color:#fff;border-color:#a0d4ff}
+.workspace.homeMode .heroActions .primary:hover{background:#257ed7;color:#fff}
+.workspace.homeMode .card{background:#102c4b;border-color:#315a80;color:#fff}
+.workspace.homeMode .card h2,.workspace.homeMode .card h3,.workspace.homeMode .card p,.workspace.homeMode .homeSectionHead h2,.workspace.homeMode .homeSectionHead p{color:#fff}
+.workspace.homeMode .homePage button:not(.primary),.workspace.homeMode .homePage button.primary{color:#fff}
+.workspace.homeMode .homePage button.primary{background:#1768c9}
+.workspace.homeMode .homePage .muted,.workspace.homeMode .homePage .small,.workspace.homeMode .homePage label,.workspace.homeMode .homePage .pill{color:#fff}
+.workspace.homeMode .logoGlyph{color:#fff;background:linear-gradient(145deg,#2588ed,#094c99)}
+input::placeholder,textarea::placeholder{color:#e0ecfa;opacity:.85}
 </style>
 </head>
 <body>
