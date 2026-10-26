@@ -60,6 +60,34 @@ function forgeCameraFrame(){
  on('forgeCamReset',()=>{forgeEnsureScenes();project.camera={x:0,y:0,zoom:1,followId:null};forgeRefreshSceneUI();draw();autosave()});
  $('forgeCamFollow')?.addEventListener('change',e=>{forgeEnsureScenes();project.camera.followId=e.target.value?Number(e.target.value):null;forgeCameraFrame();draw();autosave()});
  document.addEventListener('keydown',e=>{if(!e.altKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||''))return;const m={ArrowLeft:[-160,0],ArrowRight:[160,0],ArrowUp:[0,-120],ArrowDown:[0,120]};if(m[e.key]){e.preventDefault();forgeMoveCamera(...m[e.key])}});
+ let middlePan=null;
+ const canvasEl=document.getElementById('scene');
+ canvasEl?.addEventListener('pointerdown',e=>{
+  if(e.button!==1)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  forgeEnsureScenes();project.camera.followId=null;
+  middlePan={id:e.pointerId,x:e.clientX,y:e.clientY,cx:project.camera.x,cy:project.camera.y};
+  canvasEl.classList.add('forgePanning');canvasEl.setPointerCapture(e.pointerId);
+ },true);
+ canvasEl?.addEventListener('pointermove',e=>{
+  if(!middlePan||e.pointerId!==middlePan.id)return;
+  e.preventDefault();e.stopImmediatePropagation();
+  const bounds=canvasEl.getBoundingClientRect(),z=Math.max(.25,Math.min(3,project.camera.zoom||1));
+  const sx=canvasEl.width/bounds.width/z,sy=canvasEl.height/bounds.height/z;
+  project.camera.x=middlePan.cx-(e.clientX-middlePan.x)*sx;
+  project.camera.y=middlePan.cy-(e.clientY-middlePan.y)*sy;
+  forgeRefreshSceneUI();draw();
+ },true);
+ const finishPan=e=>{if(!middlePan||e.pointerId!==middlePan.id)return;e.stopImmediatePropagation();middlePan=null;canvasEl.classList.remove('forgePanning');autosave()};
+ canvasEl?.addEventListener('pointerup',finishPan,true);
+ canvasEl?.addEventListener('pointercancel',finishPan,true);
+ canvasEl?.addEventListener('auxclick',e=>{if(e.button===1)e.preventDefault()});
+ canvasEl?.addEventListener('wheel',e=>{
+  if(!document.getElementById('sceneWorkspace')?.classList.contains('active'))return;
+  e.preventDefault();forgeEnsureScenes();
+  project.camera.zoom=Math.max(.25,Math.min(3,(project.camera.zoom||1)*(e.deltaY<0?1.1:1/1.1)));
+  forgeRefreshSceneUI();draw();
+ },{passive:false});
  const oldDraw=draw;draw=function(){forgeCameraFrame();oldDraw();};
  const oldApply=applyProject;applyProject=function(d){oldApply(d);forgeEnsureScenes();forgeRefreshSceneUI();draw()};
  forgeEnsureScenes();forgeRefreshSceneUI();
