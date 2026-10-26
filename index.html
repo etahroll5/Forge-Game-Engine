@@ -125,7 +125,7 @@ function renderHomeProjects(){const root=$('#homeProjectList');if(!root)return;r
 $('#addRect').onclick=()=>addObject('rect');$('#addCircle').onclick=()=>addObject('circle');$('#addText').onclick=()=>addObject('text');
 $('#duplicate').onclick=()=>{const o=selected();if(!o)return toast('Select an object first');checkpoint();const n=clone(o);n.id=nextId++;n.name=o.name+' copy';n.x+=20;n.y+=20;project.objs.push(n);selectedId=n.id;commitChange()};
 $('#deleteObject').onclick=()=>{if(!selected())return;checkpoint();project.objs=project.objs.filter(o=>o.id!==selectedId);selectedId=project.objs[0]?.id??null;commitChange()};
-$('#saveProject').onclick=saveProject;$('#exportProject').onclick=exportProject;$('#homeExport').onclick=exportProject;$('#backupFolder').onclick=exportProject;
+$('#saveProject').onclick=saveProject;$('#exportProject').onclick=exportProject;$('#backupFolder').onclick=exportProject;
 $('#openProject').onclick=()=>$('#fileInput').click();$('#fileInput').onchange=e=>{const f=e.target.files?.[0];if(f)loadFromFile(f);e.target.value=''};
 function createNamedProject(){const entered=window.prompt('What would you like to name your new project?','My New Game');if(entered===null)return;const name=entered.trim();if(!name){toast('Please enter a project name');return}stopPlay();checkpoint();applyProject({name,width:960,height:540,background:'#e7edf6',objs:[],actions:[],script:''});$('#projectName').value=name;showEditor();autosave();toast('Created '+name)}$('#newProject').onclick=createNamedProject;$('#homeNew').onclick=createNamedProject;
 $('#homeContinue').onclick=showEditor;$('#homeTab').onclick=showHome;$('#pixelTab').onclick=showPixel;$('#pixelHome').onclick=showHome;
