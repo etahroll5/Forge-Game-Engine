@@ -111,16 +111,6 @@ export function initViewport(canvas, store, options = {}) {
     }
   }
 
-  // ------------------------------------------------------------- interaction
-  function localPointToNode(node, worldX, worldY) {
-    const entry = findEntry(scene().nodes, node.id);
-    const parentInst = entry?.parent ? instById.get(entry.parent.id) : null;
-    if (!parentInst) return { x: worldX, y: worldY };
-    const psx = Math.abs(parentInst.wsx || 1);
-    const psy = Math.abs(parentInst.wsy || 1);
-    return { x: (worldX - parentInst.wx) / psx, y: (worldY - parentInst.wy) / psy };
-  }
-
   function scene() {
     return store.scene();
   }
@@ -200,8 +190,7 @@ export function initViewport(canvas, store, options = {}) {
       if (!drag.moved) return;
       drag.node.x = nextX;
       drag.node.y = nextY;
-      store.type('drag');
-      render();
+      store.type('drag'); // the store subscription repaints the canvas + inspector
       return;
     }
 
