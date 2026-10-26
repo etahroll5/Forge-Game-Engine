@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AppJet Forge — 2D Game Engine</title>
+<link rel="stylesheet" href="styles/editor.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">▲</span>
+      <div class="brand-text">
+        <strong>AppJet Forge</strong>
+        <small>2D Game Engine</small>
+      </div>
+    </div>
+
+    <div class="tb-group">
+      <button id="btn-new" class="btn" title="New project">New</button>
+      <button id="btn-import" class="btn" title="Import project JSON">Import</button>
+      <button id="btn-export" class="btn" title="Export project JSON">Export</button>
+      <button id="btn-save" class="btn" title="Save to browser storage">Save</button>
+      <input type="file" id="file-import" accept="application/json,.json" hidden>
+    </div>
+
+    <div class="tb-group">
+      <button id="btn-undo" class="btn icon" title="Undo (Ctrl+Z)">↶</button>
+      <button id="btn-redo" class="btn icon" title="Redo (Ctrl+Shift+Z)">↷</button>
+    </div>
+
+    <div class="tb-group play-group">
+      <button id="btn-play" class="btn play" title="Run the game (F5)">▶ Play</button>
+      <button id="btn-stop" class="btn stop" disabled title="Stop (Esc)">■ Stop</button>
+    </div>
+
+    <div class="tb-right">
+      <label class="chk"><input type="checkbox" id="chk-grid" checked> Grid</label>
+      <label class="chk"><input type="checkbox" id="chk-snap"> Snap</label>
+      <span class="zoom-label" id="zoom-label">100%</span>
+      <button id="btn-reset-view" class="btn tiny" title="Reset viewport">Fit</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel left">
+      <div class="panel-head">
+        <span>Scenes</span>
+        <button class="btn tiny" id="btn-scene-add" title="New scene">+</button>
+      </div>
+      <div id="scene-list" class="scene-list"></div>
+
+      <div class="panel-head">
+        <span>Hierarchy</span>
+        <button class="btn tiny" id="btn-node-add" title="Add node">+ Add</button>
+      </div>
+      <div id="tree" class="tree"></div>
+    </aside>
+
+    <section class="center">
+      <div id="stage-wrap" class="stage-wrap">
+        <canvas id="stage"></canvas>
+        <div id="stage-hud" class="stage-hud"></div>
+        <div id="play-badge" class="play-badge" hidden>▶ PLAYING — press Esc to stop</div>
+        <div id="stage-help" class="stage-help">Wheel = zoom · Middle/Space+drag = pan · Drag nodes = move · Del = delete</div>
+      </div>
+
+      <div class="dock">
+        <div class="dock-tabs">
+          <button class="tab active" data-dock="events">Event Sheet</button>
+          <button class="tab" data-dock="vars">Variables</button>
+          <button class="tab" data-dock="assets">Assets</button>
+          <button class="tab" data-dock="console">Console <span id="console-badge" class="badge" hidden>0</span></button>
+        </div>
+        <div class="dock-body">
+          <div class="dock-panel active" data-dock-panel="events"><div id="events" class="events"></div></div>
+          <div class="dock-panel" data-dock-panel="vars"><div id="vars" class="vars"></div></div>
+          <div class="dock-panel" data-dock-panel="assets"><div id="assets" class="assets"></div></div>
+          <div class="dock-panel" data-dock-panel="console"><div id="console" class="console"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel right">
+      <div class="panel-head">
+        <span>Inspector</span>
+        <button class="btn tiny" id="btn-node-delete" title="Delete node">🗑</button>
+      </div>
+      <div id="inspector" class="inspector"></div>
+    </aside>
+  </main>
+</div>
+
+<div id="modal-root"></div>
+<script type="module" src="src/editor/app.js"></script>
+</body>
+</html>
