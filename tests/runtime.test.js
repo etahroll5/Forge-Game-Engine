@@ -6,7 +6,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { Engine, compare } from '../src/runtime.js';
-import { flatten, halfExtents, worldAABB, overlaps } from '../src/render.js';
+import { flatten, halfExtents, worldAABB, overlaps, pointInInst } from '../src/render.js';
 import { createScene, createNode, addBehavior } from '../src/project.js';
 import { defaultProject } from '../src/demo.js';
 
@@ -363,4 +363,31 @@ test('demo project runs a few frames without throwing', () => {
   }
   assert.equal(engine.reportedErrors.size, 0, 'demo scene must not raise runtime errors');
   assert.ok(engine.find('Player'), 'player should still exist');
+});
+
+test('demo platforms are reachable with the demo jump', () => {
+  const insts = flatten(defaultProject().scenes[0]);
+  const byName = (name) => insts.find((i) => i.def.name === name);
+  const player = byName('Player');
+  assert.ok(player, 'demo needs a Player node');
+  const bh = player.def.behaviors.find((b) => b.type === 'platformer');
+  assert.ok(bh, 'player needs a platformer behavior');
+  const apex = (bh.jump * bh.jump) / (2 * bh.gravity);
+
+  let surface = byName('Ground').wy - halfExtents(byName('Ground')).hh;
+  for (const name of ['Platform A', 'Platform B', 'Platform C']) {
+    const inst = byName(name);
+    assert.ok(inst, `demo is missing ${name}`);
+    const top = inst.wy - halfExtents(inst).hh;
+    assert.ok(surface - apex < top, `${name} (top ${top}) is out of jump reach from ${surface}`);
+    surface = top;
+  }
+});
+
+test('text nodes have a usable click area in the editor', () => {
+  const scene = sceneWith([createNode('text', { name: 'HUD', x: 150, y: 40, text: 'Score 0' })]);
+  const [inst] = flatten(scene);
+  assert.ok(pointInInst(inst, 150, 40), 'origin should hit');
+  assert.ok(pointInInst(inst, 170, 40), 'label body should hit, not just the origin point');
+  assert.ok(!pointInInst(inst, 900, 40), 'far away should miss');
 });
