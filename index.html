@@ -353,7 +353,7 @@ $('#heroProjects').onclick=()=>setHomePage('projects');
 $('#heroImport').onclick=()=>$('#fileInput').click();
 $('#projectsImport').onclick=$('#settingsImport').onclick=()=>$('#fileInput').click();
 $('#projectsNew').onclick=()=>$('#homeNew').click();
-$('#updatesRoadmap').onclick=()=>setHomePage('dashboard');
+if($('#updatesRoadmap'))$('#updatesRoadmap').onclick=()=>setHomePage('dashboard');
 $('#settingsExport').onclick=exportProject;
 $('#exportPlayable').onclick=()=>exportPlayableHTML(false);
 $('#buildAndPlay').onclick=()=>exportPlayableHTML(true);
