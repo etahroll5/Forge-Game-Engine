@@ -68,7 +68,7 @@ export function defaultProject() {
     level,
     node(
       'circle',
-      { name: 'Blob', x: 700, y: 449, w: 32, h: 32, color: '#f472b6', tags: 'enemy' },
+      { name: 'Blob', x: 700, y: 454, w: 32, h: 32, color: '#f472b6', tags: 'enemy' },
       [['patrol', { axis: 'x', distance: 150, speed: 110 }]],
     ),
   );
