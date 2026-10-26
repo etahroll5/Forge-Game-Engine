@@ -286,7 +286,7 @@ export class Engine {
     for (const inst of this.instances) {
       if (!inst.alive) continue;
       if (!inst.behaviors.some((b) => b.type === 'platformer')) continue;
-      if (inst.wy - halfExtents(inst).hw > this.scene.height + 400) {
+      if (inst.wy - halfExtents(inst).hh > this.scene.height + 400) {
         inst.wx = inst.spawnX;
         inst.wy = inst.spawnY;
         inst.vx = 0;
@@ -817,6 +817,16 @@ export class Engine {
     const canvas = this.canvas;
     const ctx = this.ctx;
     const dpr = window.devicePixelRatio || 1;
+    const rect = typeof canvas.getBoundingClientRect === 'function' ? canvas.getBoundingClientRect() : { width: 0, height: 0 };
+    if (rect.width > 0 && rect.height > 0) {
+      // Keep the backing store in sync with the CSS box (window resizes, panel drags).
+      const wantW = Math.max(1, Math.round(rect.width * dpr));
+      const wantH = Math.max(1, Math.round(rect.height * dpr));
+      if (canvas.width !== wantW || canvas.height !== wantH) {
+        canvas.width = wantW;
+        canvas.height = wantH;
+      }
+    }
     const W = canvas.width / dpr;
     const H = canvas.height / dpr;
     if (W <= 0 || H <= 0) return;
