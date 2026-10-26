@@ -5,6 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
 import os from 'node:os';
+import { promises as fs } from 'node:fs';
 import { join } from 'node:path';
 import { createForgeServer } from '../server.js';
 
