@@ -130,7 +130,7 @@ $('#openProject').onclick=()=>$('#fileInput').click();$('#fileInput').onchange=e
 $('#newProject').onclick=$('#homeNew').onclick=()=>{if(!confirm('Create a new project? Export your current project first if you want a backup.'))return;stopPlay();checkpoint();applyProject({name:'Untitled Game',width:960,height:540,background:'#e7edf6',objs:[],actions:[],script:''});showEditor();toast('New project created')};
 $('#homeContinue').onclick=showEditor;$('#homeTab').onclick=showHome;$('#pixelTab').onclick=showPixel;
 $$('[data-goto]').forEach(b=>b.onclick=()=>{const dest=b.dataset.goto;if(dest==='editor')showEditor();if(dest==='events'){showEditor();setPage('eventsPage')}if(dest==='pixel')showPixel()});
-$('#playButton').onclick=startPlay;$('#stopButton').onclick=stopPlay;$('#undoButton').onclick=undo;$('#redoButton').onclick=redo;
+$('#selectTool').onclick=()=>{ $('.toolbar .tab').forEach(b=>b.classList.toggle('active',b.id==='selectTool'));setStatus('Select tool active');};$('#playButton').onclick=startPlay;$('#stopButton').onclick=stopPlay;$('#undoButton').onclick=undo;$('#redoButton').onclick=redo;
 $('#addEvent').onclick=()=>{checkpoint();project.actions.push({id:Math.max(0,...project.actions.map(a=>+a.id||0))+1,trigger:'onStart',action:'moveX',target:'selected',value:'10'});renderEvents();autosave()};
 $('#applyScript').onclick=()=>{checkpoint();project.script=$('#scriptEditor').value;compileScript();autosave();toast('ForgeScript applied')};
 $('#projectName').onchange=()=>{project.name=$('#projectName').value.trim()||'My Forge Game';autosave()};
