@@ -4,15 +4,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import http from 'node:http';
+import os from 'node:os';
+import { join } from 'node:path';
 import { createForgeServer } from '../server.js';
 
 let server;
-let port;
+// The suite talks to the server over a unix domain socket: nothing is bound to
+// an interface, so running tests never opens a port on the developer machine.
+const socketPath = join(os.tmpdir(), `forge-test-${process.pid}-${Date.now()}.sock`);
 
 function request(path, method = 'GET') {
   return new Promise((resolve, reject) => {
     const req = http.request(
-      { host: '127.0.0.1', port, path, method },
+      { socketPath, path, method },
       (res) => {
         let body = '';
         res.setEncoding('utf8');
