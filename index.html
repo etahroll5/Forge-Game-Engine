@@ -211,6 +211,20 @@ function exportPlayableHTML(openInBrowser=false){
 (()=>{const q=id=>document.getElementById(id),d=q('forgeHelpDialog');q('quickHelp').onclick=()=>{d.classList.add('open');q('closeForgeHelp').focus()};q('closeForgeHelp').onclick=()=>d.classList.remove('open');d.onclick=e=>{if(e.target===d)d.classList.remove('open')};q('quickHome').onclick=()=>{const h=q('homeTab');if(h&&h.offsetParent!==null)h.click();else{const t=document.querySelector('[data-page="homePage"]');if(t)t.click();else{const b=q('newProject');if(b)b.focus()}}};document.addEventListener('keydown',e=>{if(e.key==='Escape')d.classList.remove('open');if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();q('saveProject')?.click()}})})();
 </script><script>
 (()=>{const $=id=>document.getElementById(id),click=id=>{const b=$(id);if(b)b.click()};$('forgeStarterPlatformer')?.addEventListener('click',()=>{click('addRect');click('addHazard');click('addCollectible');click('addBouncePad');click('addMovingPlatform');});$('forgeStarterEffects')?.addEventListener('click',()=>{click('addLight');click('addEmitter')});$('forgeOpenCreatorTools')?.addEventListener('click',()=>document.querySelector('[data-page="toolsPage"]')?.click());$('forgeOpenEvents')?.addEventListener('click',()=>click('workspaceEventsTab'));$('forgeOpenScript')?.addEventListener('click',()=>click('workspaceScriptTab'));})();
+</script><style>
+/* Keep all interactive controls above decorative homepage elements */
+.workspace.homeMode .homeNav,.workspace.homeMode .heroCopy,.workspace.homeMode .heroActions,.workspace.homeMode .homeGrid,.workspace.homeMode .homeTile,.workspace.homeMode .cardGrid{position:relative;z-index:2}
+.workspace.homeMode .heroHome::before,.workspace.homeMode .heroHome::after{pointer-events:none}
+.workspace.homeMode button,.workspace.homeMode a,.workspace.homeMode input,.workspace.homeMode select{pointer-events:auto}
+.workspace.homeMode .homeTile{background:#123352;border:1px solid #315c86;border-radius:14px;padding:20px;color:#fff}
+.workspace.homeMode .homeTile h3,.workspace.homeMode .homeTile p{color:#fff}
+.workspace.homeMode .homeTile button{background:#1768c9;color:#fff;border:1px solid #64afff}
+</style><script>
+(()=>{const byId=id=>document.getElementById(id);
+byId('quickHome')?.addEventListener('click',()=>byId('homeTab')?.click());
+byId('forgeOpenEvents')?.addEventListener('click',()=>{byId('workspaceEventsTab')?.click()});
+byId('forgeOpenScript')?.addEventListener('click',()=>{byId('workspaceScriptTab')?.click()});
+})();
 </script></body></html>';
  const blob=new Blob([html],{type:'text/html'}),url=URL.createObjectURL(blob);if(openInBrowser&&previewWindow){previewWindow.location.href=url;setTimeout(()=>URL.revokeObjectURL(url),60000);toast('Built! Your browser game is ready in the new tab');return}if(openInBrowser&&!previewWindow)toast('Popup blocked. Allow pop-ups for Forge and click Build & Play again.');const a=document.createElement('a');a.href=url;a.download=(data.name.replace(/[^a-z0-9_-]/gi,'-')||'forge-game')+'.html';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);if(!openInBrowser)toast('Standalone playable HTML exported');
 }
@@ -280,7 +294,7 @@ $('#heroProjects').onclick=()=>setHomePage('projects');
 $('#heroImport').onclick=()=>$('#fileInput').click();
 $('#projectsImport').onclick=$('#settingsImport').onclick=()=>$('#fileInput').click();
 $('#projectsNew').onclick=()=>$('#homeNew').click();
-$('#updatesRoadmap').onclick=()=>setHomePage('dashboard');
+$('#updatesRoadmap').onclick=()=>{showHome();setHomePage('dashboard');document.getElementById('roadmapGrid')?.scrollIntoView({behavior:'smooth',block:'start'})};
 $('#settingsExport').onclick=exportProject;
 $('#exportPlayable').onclick=()=>exportPlayableHTML(false);
 $('#buildAndPlay').onclick=()=>exportPlayableHTML(true);
