@@ -166,4 +166,8 @@ test('editor UI smoke suite', { skip }, async (t) => {
     window.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
     assert.equal(scene.nodes.length, count - 1, 'Delete removes the selected node');
   });
+
+  // Tear the jsdom window down so pending timers/frames do not keep node alive.
+  if (window.appjet.engine) document.getElementById('btn-stop').dispatchEvent(new window.Event('click'));
+  window.close();
 });
