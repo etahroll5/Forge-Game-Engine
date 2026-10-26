@@ -42,6 +42,13 @@ test('every node type has defaults and valid fields', () => {
   assert.equal(NODE_TYPE_ORDER.length, Object.keys(NODE_TYPES).length);
 });
 
+test('no node type declares the same field key twice', () => {
+  for (const type of NODE_TYPE_ORDER) {
+    const keys = NODE_TYPES[type].fields.map((f) => f.key);
+    assert.equal(new Set(keys).size, keys.length, `${type} has duplicate field keys: ${keys.join(', ')}`);
+  }
+});
+
 test('every behavior has defaults and valid fields', () => {
   for (const type of BEHAVIOR_ORDER) {
     const def = BEHAVIORS[type];

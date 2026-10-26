@@ -44,7 +44,7 @@ export function defaultProject() {
     node(
       'rect',
       { name: 'Player', x: 120, y: PLAYER_Y, w: 34, h: 42, color: '#f59e0b', tags: 'player' },
-      [['platformer', { speed: 240, jump: 560, gravity: 1750 }]],
+      [['platformer', { speed: 240, jump: 720, gravity: 1800 }]],
     ),
   );
 
