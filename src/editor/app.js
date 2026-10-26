@@ -328,13 +328,14 @@ function main() {
 
     if (mod && key === 'z') {
       e.preventDefault();
+      if (playing) return; // don't rewrite the project underneath a running game
       if (e.shiftKey) store.redo();
       else store.undo();
       return;
     }
     if (mod && key === 'y') {
       e.preventDefault();
-      store.redo();
+      if (!playing) store.redo();
       return;
     }
     if (mod && key === 's') {
@@ -354,7 +355,9 @@ function main() {
       return;
     }
     if (isTyping()) return;
-
+    // While the game runs, editing shortcuts are disabled so the live scene
+    // can't be mutated out from under the player.
+    if (playing) return;
     if (mod && key === 'd') {
       e.preventDefault();
       store.duplicateNode();
