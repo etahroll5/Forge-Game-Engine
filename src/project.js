@@ -8,6 +8,102 @@ import { NODE_TYPES, NODE_TYPE_ORDER, BEHAVIORS, createEvent } from './schema.js
 export const VERSION = 1;
 export const STORAGE_KEY = 'appjet-forge.project.v1';
 
+// ---------------------------------------------------------------------------
+// Import hardening
+// ---------------------------------------------------------------------------
+// A project file is attacker-controlled input on the Import path (and anything
+// can be written into localStorage), so everything coming from JSON is treated
+// as untrusted: prototype-poisoning keys are dropped, assets must be inline
+// images, numbers are bounded and the tree size is capped so a hostile file
+// cannot freeze the tab.
+export const LIMITS = {
+  scenes: 64,
+  nodesPerScene: 5000,
+  nodeDepth: 32,
+  eventsPerScene: 500,
+  conditionsPerEvent: 64,
+  actionsPerEvent: 64,
+  vars: 200,
+  assets: 48,
+  assetBytes: 6 * 1024 * 1024, // base64 chars (~4.5 MB binary)
+  recordKeys: 256,
+  textLength: 20000,
+  scriptLength: 200000,
+  stringLength: 400,
+  coord: 1e7,
+  sceneSize: 10000,
+};
+
+// `__proto__` / `constructor` / `prototype` are never project data: assigning
+// them replaces a prototype instead of storing a field.
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+// Only inline raster/vector images may be used as sprite sources. Anything else
+// (http URLs, javascript:, file:) would turn a project file into a tracking
+// beacon or a same-origin capability the CSP otherwise denies.
+const ASSET_DATA_URL =
+  /^data:image\/(png|jpe?g|gif|webp|svg\+xml|bmp|x-icon)(;[a-z0-9=+.-]+)*,/i;
+
+export function isUnsafeKey(key) {
+  return UNSAFE_KEYS.has(key);
+}
+
+function str(value, fallback = '', max = LIMITS.stringLength) {
+  if (typeof value !== 'string') return fallback;
+  return value.length > max ? value.slice(0, max) : value;
+}
+
+function boundedNumber(value, fallback, min, max) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return fallback;
+  return n < min ? min : n > max ? max : n;
+}
+
+/**
+ * Copy the own primitive properties of an untrusted record, dropping unsafe
+ * keys, non-primitive values and anything past `maxKeys`. Used for field maps
+ * (variables, event params, project settings) where objects are never valid.
+ */
+export function sanitizeRecord(raw, { maxKeys = LIMITS.recordKeys, numericLimit = LIMITS.coord } = {}) {
+  const out = {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  let kept = 0;
+  for (const [key, value] of Object.entries(raw)) {
+    if (kept >= maxKeys) break;
+    if (isUnsafeKey(key)) continue;
+    const kind = typeof value;
+    if (kind === 'string') out[key] = str(value, '', LIMITS.textLength);
+    else if (kind === 'boolean') out[key] = value;
+    else if (kind === 'number' && Number.isFinite(value)) {
+      out[key] = Math.max(-numericLimit, Math.min(numericLimit, value));
+    } else continue;
+    kept += 1;
+  }
+  return out;
+}
+
+const NUMERIC_BOUNDS = {
+  x: [-LIMITS.coord, LIMITS.coord],
+  y: [-LIMITS.coord, LIMITS.coord],
+  w: [0, LIMITS.coord],
+  h: [0, LIMITS.coord],
+  rotation: [-36000, 36000],
+  scaleX: [-1000, 1000],
+  scaleY: [-1000, 1000],
+  opacity: [0, 1],
+  fontSize: [6, 400],
+  zoom: [0.1, 6],
+  smoothing: [0, 1],
+};
+
+function applyNumericBounds(node) {
+  for (const [key, [min, max]] of Object.entries(NUMERIC_BOUNDS)) {
+    if (!(key in node)) continue;
+    const fallback = key.startsWith('scale') ? 1 : 0;
+    node[key] = boundedNumber(node[key], fallback, min, max);
+  }
+}
+
 export function createNode(type, overrides = {}) {
   const schema = NODE_TYPES[type] || NODE_TYPES.rect;
   const node = {
