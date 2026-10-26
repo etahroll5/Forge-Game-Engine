@@ -27,15 +27,11 @@ export function defaultProject() {
 
   // Platforms live inside a group so moving one node moves them all.
   const platforms = node('group', { name: 'Platforms', x: 0, y: 0 });
-  insertNode(level, node('rect', { name: 'Platform A', x: 280, y: 380, w: 200, h: 22, color: '#2b4a6f', solid: true }));
   platforms.children.push(
     node('rect', { name: 'Platform A', x: 280, y: 380, w: 200, h: 22, color: '#2b4a6f', solid: true }),
     node('rect', { name: 'Platform B', x: 660, y: 290, w: 170, h: 22, color: '#2b4a6f', solid: true }),
     node('rect', { name: 'Platform C', x: 470, y: 200, w: 130, h: 22, color: '#2b4a6f', solid: true }),
   );
-  // Remove the stray node that was inserted above (keeps helper code simple).
-  level.nodes.pop();
-
   insertNode(level, platforms);
   insertNode(level, node('rect', { name: 'Ground', x: 480, y: 505, w: 960, h: 70, color: '#143049', solid: true }));
 
