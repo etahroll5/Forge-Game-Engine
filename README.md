@@ -67,6 +67,9 @@ move with `←` `→` / `A` `D`, jump with `↑` / `W` / `Space`, collect the co
 | `F5` | Play / stop |
 | `Esc` | Stop playing |
 
+Editing shortcuts (undo, duplicate, delete, nudge) are ignored while the game is playing so the
+live scene can't change underneath the player; `Ctrl/Cmd + S` still saves.
+
 ---
 
 ## Node types
