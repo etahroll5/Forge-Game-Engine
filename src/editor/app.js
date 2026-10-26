@@ -139,8 +139,7 @@ function main() {
     const parent = store.selected();
     const nestInGroup = parent && parent.type === 'group' ? parent.id : null;
     const grid = el('div', { class: 'modal-grid' });
-    const close = () => {};
-    let closeFn = close;
+    let closeFn = () => {};
     for (const type of NODE_TYPE_ORDER) {
       const def = NODE_TYPES[type];
       grid.appendChild(

@@ -65,6 +65,7 @@ export function initViewport(canvas, store, options = {}) {
 
   function render() {
     resize();
+    if (!active) return;
     const scene = store.scene();
     const { w, h } = canvasSize();
     const s = scale();
