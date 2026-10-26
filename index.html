@@ -108,9 +108,9 @@ function setPage(name){$$('.tab[data-page]').forEach(b=>b.classList.toggle('acti
 function showEditor(){stopPlay();document.querySelector('.workspace').classList.remove('homeMode');$('#homeView').classList.remove('active');$('#homeView').style.display='none';$('#pixelView').classList.remove('active');$('#pixelView').style.display='none';$('#editorView').style.display='flex';$('#inspectorPanel').style.display='block';$('#editorToolbar').style.display='flex';draw()}
 function showHome(){stopPlay();document.querySelector('.workspace').classList.add('homeMode');$('#editorView').style.display='none';$('#pixelView').classList.remove('active');$('#pixelView').style.display='none';$('#homeView').classList.add('active');$('#homeView').style.display='block';$('#inspectorPanel').style.display='none';$('#editorToolbar').style.display='none';setHomePage('dashboard')}
 function showPixel(){stopPlay();document.querySelector('.workspace').classList.remove('homeMode');$('#editorView').style.display='none';$('#homeView').classList.remove('active');$('#homeView').style.display='none';$('#pixelView').classList.add('active');$('#pixelView').style.display='block';$('#inspectorPanel').style.display='none';$('#editorToolbar').style.display='flex';drawPixel()}
-$('.tab[data-page]').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
-function setHomePage(name){const ids={dashboard:'homeDashboard',projects:'homeProjects',updates:'homeUpdates',settings:'homeSettings'};Object.entries(ids).forEach(([key,id])=>$('#'+id)?.classList.toggle('active',key===name));$('[data-homepage]').forEach(b=>b.classList.toggle('active',b.dataset.homepage===name));if(name==='projects')renderHomeProjects();if(name==='settings')checkStorageStatus()}
-$('[data-homepage]').forEach(b=>b.onclick=()=>setHomePage(b.dataset.homepage));
+$$('.tab[data-page]').forEach(b=>b.onclick=()=>setPage(b.dataset.page));
+function setHomePage(name){const ids={dashboard:'homeDashboard',projects:'homeProjects',updates:'homeUpdates',settings:'homeSettings'};Object.entries(ids).forEach(([key,id])=>$$('#'+id)?.classList.toggle('active',key===name));$('[data-homepage]').forEach(b=>b.classList.toggle('active',b.dataset.homepage===name));if(name==='projects')renderHomeProjects();if(name==='settings')checkStorageStatus()}
+$$('[data-homepage]').forEach(b=>b.onclick=()=>setHomePage(b.dataset.homepage));
 $('#heroProjects').onclick=()=>setHomePage('projects');
 $('#heroImport').onclick=()=>$('#fileInput').click();
 $('#projectsImport').onclick=$('#settingsImport').onclick=()=>$('#fileInput').click();
