@@ -135,12 +135,13 @@ function safePath(urlPath) {
   return { filePath: candidate };
 }
 
-function sendPlain(res, status, body) {
+function sendPlain(res, status, body, extra = {}) {
   res.writeHead(status, {
     ...SECURITY_HEADERS,
     'content-type': 'text/plain; charset=utf-8',
     'content-length': Buffer.byteLength(body),
     'cache-control': 'no-store',
+    ...extra,
   });
   res.end(body);
 }
