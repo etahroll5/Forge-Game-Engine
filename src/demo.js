@@ -25,29 +25,33 @@ export function defaultProject() {
   level.bg = '#0b1020';
   level.vars = { score: 0, health: 3 };
 
+  // Ground top = 470. Player half height = 21 → rest y = 449.
+  const GROUND_Y = 505;
+  const PLAYER_Y = 449;
+
   // Platforms live inside a group so moving one node moves them all.
   const platforms = node('group', { name: 'Platforms', x: 0, y: 0 });
   platforms.children.push(
-    node('rect', { name: 'Platform A', x: 280, y: 380, w: 200, h: 22, color: '#2b4a6f', solid: true }),
-    node('rect', { name: 'Platform B', x: 660, y: 290, w: 170, h: 22, color: '#2b4a6f', solid: true }),
-    node('rect', { name: 'Platform C', x: 470, y: 200, w: 130, h: 22, color: '#2b4a6f', solid: true }),
+    node('rect', { name: 'Platform A', x: 300, y: 380, w: 200, h: 22, color: '#2b4a6f', solid: true }),
+    node('rect', { name: 'Platform B', x: 560, y: 285, w: 170, h: 22, color: '#2b4a6f', solid: true }),
+    node('rect', { name: 'Platform C', x: 790, y: 195, w: 140, h: 22, color: '#2b4a6f', solid: true }),
   );
   insertNode(level, platforms);
-  insertNode(level, node('rect', { name: 'Ground', x: 480, y: 505, w: 960, h: 70, color: '#143049', solid: true }));
+  insertNode(level, node('rect', { name: 'Ground', x: 480, y: GROUND_Y, w: 960, h: 70, color: '#143049', solid: true }));
 
   insertNode(
     level,
     node(
       'rect',
-      { name: 'Player', x: 120, y: 430, w: 34, h: 42, color: '#f59e0b', tags: 'player' },
+      { name: 'Player', x: 120, y: PLAYER_Y, w: 34, h: 42, color: '#f59e0b', tags: 'player' },
       [['platformer', { speed: 240, jump: 560, gravity: 1750 }]],
     ),
   );
 
   const coinSpots = [
-    [280, 330],
-    [660, 240],
-    [470, 150],
+    [300, 325],
+    [560, 230],
+    [790, 140],
   ];
   coinSpots.forEach(([x, y], i) => {
     insertNode(
@@ -55,7 +59,7 @@ export function defaultProject() {
       node(
         'circle',
         { name: `Coin ${i + 1}`, x, y, w: 22, h: 22, color: '#fde047', tags: 'coin' },
-        [['collectible', { tag: 'player', variable: 'score', value: 10 }], ['sine', { axis: 'y', amplitude: 6, frequency: 0.9, phase: i }]],
+        [['collectible', { tag: 'player', variable: 'score', value: 10 }], ['sine', { axis: 'y', amplitude: 5, frequency: 0.9, phase: i }]],
       ),
     );
   });
@@ -64,13 +68,13 @@ export function defaultProject() {
     level,
     node(
       'circle',
-      { name: 'Blob', x: 560, y: 470, w: 32, h: 32, color: '#f472b6', tags: 'enemy' },
-      [['patrol', { axis: 'x', distance: 130, speed: 110 }], ['sine', { axis: 'y', amplitude: 4, frequency: 3 }]],
+      { name: 'Blob', x: 700, y: 449, w: 32, h: 32, color: '#f472b6', tags: 'enemy' },
+      [['patrol', { axis: 'x', distance: 150, speed: 110 }]],
     ),
   );
 
-  insertNode(level, node('text', { name: 'HUD', x: 150, y: 40, text: 'Score 0', fontSize: 22, color: '#93c5fd' }));
-  insertNode(level, node('camera', { name: 'Camera', x: 480, y: 270, follow: 'Player', zoom: 1.45, smoothing: 0.12 }));
+  insertNode(level, node('text', { name: 'HUD', x: 150, y: 40, text: 'Score 0   Health 3', fontSize: 22, color: '#93c5fd' }));
+  insertNode(level, node('camera', { name: 'Camera', x: 480, y: 270, follow: 'Player', zoom: 1, smoothing: 0.12 }));
 
   level.events = [
     {
@@ -97,7 +101,7 @@ export function defaultProject() {
       conditions: [],
       actions: [
         { id: 'a3', type: 'addVar', params: { name: 'health', value: -1 } },
-        { id: 'a4', type: 'setPos', params: { node: 'Player', x: 120, y: 430 } },
+        { id: 'a4', type: 'setPos', params: { node: 'Player', x: 120, y: 449 } },
         { id: 'a5', type: 'playTone', params: { freq: 220, duration: 0.14 } },
       ],
     },
