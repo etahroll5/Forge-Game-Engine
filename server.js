@@ -41,12 +41,14 @@ const MIME = {
 // origin: no remote script/style/frame injection, no `javascript:` URLs, no
 // base-tag or form hijacking.
 //
-// Framing: the editor must be embeddable by the hosting console (which frames
-// the deployment over https), so `frame-ancestors` allows same-origin plus
-// https parents instead of 'none'. That still blocks clickjacking from plain
-// http, `data:` and `file:` origins. The legacy `X-Frame-Options` header is
-// deliberately omitted: it cannot express an allow-list ('ALLOW-FROM' is dead)
-// and modern browsers ignore it whenever frame-ancestors is present.
+// Framing: the editor is a standalone app and must not be embeddable, so
+// `frame-ancestors 'none'` blocks clickjacking outright. Do NOT widen this to
+// `'self' https:`: `https:` is a scheme wildcard, so it would grant framing
+// rights to *every* https origin and reopen clickjacking against an editor that
+// can overwrite, delete and import projects. If a specific parent ever needs to
+// embed the editor, list that exact origin - never the whole scheme.
+// `X-Frame-Options: DENY` is sent alongside it as defence in depth, because
+// older browsers ignore `frame-ancestors` entirely.
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-eval'",
