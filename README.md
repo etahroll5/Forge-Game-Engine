@@ -4,7 +4,7 @@ A **2D game engine and editor that runs entirely in the browser** — a Construc
 event sheet, a Godot-style scene tree and behaviors, and a live canvas viewport, all in plain
 ES modules with **no build step and no runtime dependencies**.
 
-![stack](https://img.shields.io/badge/stack-vanilla_ES_modules-38bdf8) ![deps](https://img.shields.io/badge/runtime_deps-0-22c55e) ![tests](https://img.shields.io/badge/tests-49-22c55e)
+![stack](https://img.shields.io/badge/stack-vanilla_ES_modules-38bdf8) ![deps](https://img.shields.io/badge/runtime_deps-0-22c55e) ![tests](https://img.shields.io/badge/tests-52-22c55e)
 
 ---
 
@@ -225,7 +225,7 @@ tests/                  node:test suites (model, schema, runtime, jsdom UI smoke
 loads fast on any static host, and the runtime can be unit-tested under Node with a stub canvas.
 
 The model layer (`project.js`, `schema.js`, `store.js`, `render.js`, `runtime.js`) never touches
-the DOM, which is what makes the 49 tests runnable without a browser.
+the DOM, which is what makes the 52 tests runnable without a browser.
 
 ---
 
