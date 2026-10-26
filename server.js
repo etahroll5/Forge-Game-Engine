@@ -150,7 +150,7 @@ export function createForgeServer() {
   return createServer(async (req, res) => {
     try {
       if (req.method !== 'GET' && req.method !== 'HEAD') {
-        sendPlain(res, 405, 'Method Not Allowed');
+        sendPlain(res, 405, 'Method Not Allowed', { allow: 'GET, HEAD' });
         return;
       }
 
