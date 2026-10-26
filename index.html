@@ -597,4 +597,59 @@ label,.muted,.small{color:#c7bfdc}
 #toolsWorkspace button:hover,#forgeFeatureLab button:hover{background:#4b3268!important;border-color:#aa80eb!important}
 #forgeCameraStatus{color:#d8c5f5!important}
 @media(prefers-reduced-motion:reduce){button,.homeTile{transition:none!important}}
-</style><script defer src="./creator-lab-2.js"></script><script defer src="./scene-camera.js"></script><script>document.getElementById('releaseOpenEditor')?.addEventListener('click',()=>document.getElementById('homeContinue')?.click());</script><script>(function(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(button=>{button.addEventListener('click',()=>{const target=document.getElementById(button.dataset.rail);if(target&&!target.disabled)target.click()})});function refreshRail(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(b=>b.classList.toggle('railActive',document.getElementById(b.dataset.rail)?.classList.contains('active')||false))}document.getElementById('forgeToolRail')?.addEventListener('click',refreshRail);document.querySelectorAll('.workspaceTab').forEach(b=>b.addEventListener('click',refreshRail));refreshRail()})();</script></body></html>
+
+/* Forge studio 1.0 — refined Construct-style workspace */
+.workspace:not(.homeMode){grid-template-columns:54px minmax(230px,255px) minmax(380px,1fr) minmax(245px,285px)!important;background:#0c0a13}
+.workspace:not(.homeMode) #forgeToolRail{grid-column:1!important;grid-row:1!important}
+.workspace:not(.homeMode) .sidebar.left{grid-column:2!important;grid-row:1!important;border-right:1px solid #413450!important;border-left:0!important;background:#15111e!important}
+.workspace:not(.homeMode) .center{grid-column:3!important;grid-row:1!important;min-width:0}
+.workspace:not(.homeMode) .sidebar.right{grid-column:4!important;grid-row:1!important;display:block!important;background:#15111e!important;border-left:1px solid #413450!important}
+.workspace:not(.homeMode) .topbar{background:#15111e}
+.workspace:not(.homeMode) .toolbar{min-height:51px;flex-wrap:wrap;gap:6px;padding:6px 10px;background:#191322!important}
+.workspace:not(.homeMode) .workspaceTabs{background:#100d19;border-radius:10px;padding:3px;gap:2px}
+.workspace:not(.homeMode) .workspaceTab{border-radius:8px!important;padding:8px 13px!important;font-weight:650;letter-spacing:.01em}
+.workspace:not(.homeMode) .workspaceTab.active{background:#50358a!important;border:1px solid #9a78eb!important;box-shadow:0 2px 12px #6f4de533!important}
+.workspace:not(.homeMode) #forgeSceneBar{padding:9px 13px!important;gap:7px!important}
+.workspace:not(.homeMode) #forgeSceneBar label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#bcaad8!important}
+.workspace:not(.homeMode) .sideHead{background:#1c1726!important;border-bottom:1px solid #352b46;padding:12px 14px!important;color:#cbb9e5!important}
+.workspace:not(.homeMode) .sideBlock{padding:11px 13px 16px!important}
+.workspace:not(.homeMode) #objectList .object{padding:9px!important;border:1px solid transparent;border-radius:8px;min-height:36px}
+.workspace:not(.homeMode) #objectList .object:hover{background:#292039;border-color:#4a385f}
+.workspace:not(.homeMode) #objectList .object.active{background:#463067!important;border-color:#9673d7!important}
+.workspace:not(.homeMode) #inspector{padding:10px!important}
+.workspace:not(.homeMode) #inspectorPanel .section{border-top:1px solid #372c47}
+.workspace:not(.homeMode) #sceneWorkspace .canvasWrap{border-radius:9px!important}
+.workspace:not(.homeMode) .workspaceIntro{border-radius:0!important;padding:22px 25px!important}
+.workspace:not(.homeMode) .workspaceIntro h1{font-size:24px;letter-spacing:-.045em}
+#eventsWorkspace{background:#100d18!important}
+#eventsWorkspace .eventSheet{display:flex!important;flex-direction:column;gap:12px;padding:20px;overflow:auto;align-content:stretch}
+#eventsWorkspace .eventRow{display:grid!important;grid-template-columns:minmax(140px,1fr) minmax(140px,1fr) minmax(120px,.8fr) 34px!important;gap:10px!important;align-items:end;background:#1d172a;border:1px solid #514068;border-left:4px solid #9574ed;border-radius:12px;padding:15px!important;box-shadow:0 7px 20px #0002}
+#eventsWorkspace .eventRow .field{min-width:0}
+#eventsWorkspace .eventRow .field input,#eventsWorkspace .eventRow .field select{width:100%}
+#eventsWorkspace .eventRow>button{min-width:34px;min-height:37px}
+#eventsWorkspace .empty{background:#211a30;border:1px dashed #624e81;border-radius:14px;padding:28px;color:#c9b8e1}
+#forgeEventPicker[hidden]{display:none!important}
+#forgeEventPicker{position:fixed;inset:0;z-index:10000;background:#06040cbb;backdrop-filter:blur(9px);display:grid;place-items:center;padding:20px}
+.forgeEventDialog{width:min(760px,100%);max-height:min(760px,92vh);display:flex;flex-direction:column;background:#191425;border:1px solid #665183;border-radius:19px;box-shadow:0 30px 90px #000a;overflow:hidden}
+.forgeEventDialog header{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:25px 27px 18px;background:linear-gradient(115deg,#33234c,#1b1528)}
+.forgeEventDialog header small{font-weight:850;letter-spacing:.16em;color:#c1a0ff}
+.forgeEventDialog header h2{font-size:26px;margin:7px 0;letter-spacing:-.04em;color:#fff}
+.forgeEventDialog header p{margin:0;color:#c8bbd9}
+.forgeEventDialog header button{width:37px}
+.forgeEventDialog nav{display:flex;gap:10px;padding:13px 24px;border-block:1px solid #413451;background:#20192d}
+.forgeEventDialog nav span{font-size:12px;font-weight:750;color:#9687ad;padding:7px 11px;border-radius:9px}
+.forgeEventDialog nav span.active{background:#503484;color:#fff}
+.forgePickerContent{padding:20px 25px;overflow:auto;min-height:250px}
+#forgePickerSearch{margin-bottom:16px;background:#120e1d;border-color:#5d4a78;padding:12px}
+#forgePickerItems h3{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#c4b1e0;margin:18px 0 9px}
+.forgePickerGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.forgePickerGrid button{padding:16px;text-align:left;background:#282038;border:1px solid #4d3c68;border-radius:11px;font-weight:700;min-height:54px}
+.forgePickerGrid button:hover{background:#43305e;border-color:#ac86fc;transform:translateY(-1px)}
+#forgePickerParams{display:grid;gap:10px}
+#forgePickerParams[hidden]{display:none}
+#forgePickerParams label{margin:8px 0 0}
+#forgePickerSummary{font-weight:800;color:#e6d8ff;background:#35264c;padding:13px;border-radius:9px}
+.forgeEventDialog footer{display:flex;justify-content:space-between;padding:16px 25px;border-top:1px solid #40344f;background:#211a2e}
+@media(max-width:1100px){.workspace:not(.homeMode){grid-template-columns:48px 205px minmax(260px,1fr)!important}.workspace:not(.homeMode) .sidebar.right{display:none!important}}
+@media(max-width:760px){.workspace:not(.homeMode){grid-template-columns:44px minmax(220px,1fr)!important}.workspace:not(.homeMode) .sidebar.left{display:none!important}.forgePickerGrid{grid-template-columns:1fr}#eventsWorkspace .eventRow{grid-template-columns:1fr 1fr!important}}
+</style><script defer src="./creator-lab-2.js"></script><script defer src="./scene-camera.js"></script><script>document.getElementById('releaseOpenEditor')?.addEventListener('click',()=>document.getElementById('homeContinue')?.click());</script><script>(function(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(button=>{button.addEventListener('click',()=>{const target=document.getElementById(button.dataset.rail);if(target&&!target.disabled)target.click()})});function refreshRail(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(b=>b.classList.toggle('railActive',document.getElementById(b.dataset.rail)?.classList.contains('active')||false))}document.getElementById('forgeToolRail')?.addEventListener('click',refreshRail);document.querySelectorAll('.workspaceTab').forEach(b=>b.addEventListener('click',refreshRail));refreshRail()})();</script><script defer src="./event-picker.js"></script></body></html>
