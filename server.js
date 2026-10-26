@@ -58,12 +58,13 @@ const CSP = [
   "object-src 'none'",
   "base-uri 'none'",
   "form-action 'none'",
-  "frame-ancestors 'self' https:",
+  "frame-ancestors 'none'",
 ].join('; ');
 
 const SECURITY_HEADERS = {
   'content-security-policy': CSP,
   'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
   'referrer-policy': 'no-referrer',
   'cross-origin-opener-policy': 'same-origin',
   'permissions-policy': 'geolocation=(), camera=(), microphone=(), payment=()',
