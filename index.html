@@ -106,7 +106,8 @@ function exportProject(){project.name=$('#projectName').value.trim()||'My Forge 
 function toBuildServerProject(){
  const source=clone(project);source.name=$('#projectName').value.trim()||source.name||'My Forge Game';
  const behaviorMap={platformer:{type:'platformer',speed:4,gravity:.55,jump:11},platformer2:{type:'eightWay',speed:4},platform:{type:'solid'},solid:{type:'solid'},bounce:{type:'solid'},movingPlatform:{type:'solid'},hazard:{type:'hazard'},collectible:{type:'collectible'},none:null};
- const sx=800/Math.max(1,source.width||960),sy=450/Math.max(1,source.height||540);\n const objects=(source.objs||[]).map(o=>({id:String(o.id),name:o.name||('Object '+o.id),kind:o.type==='circle'?'circle':o.type==='text'?'text':'rectangle',x:o.x*sx,y:o.y*sy,w:o.w*sx,h:o.h*sy,color:o.color||'#79e2d0',text:o.text||'',solid:!!o.solid||['platform','solid','bounce','movingPlatform'].includes(o.behavior),vx:(o.vx||0)*sx,vy:(o.vy||0)*sy,angle:o.angle||0,pixels:Array.isArray(o.pixelData)?o.pixelData:[],behaviors:(behaviorMap[o.behavior]?[{id:'b-'+o.id,...behaviorMap[o.behavior]}]:[])}));
+ const sx=800/Math.max(1,source.width||960),sy=450/Math.max(1,source.height||540);
+ const objects=(source.objs||[]).map(o=>({id:String(o.id),name:o.name||('Object '+o.id),kind:o.type==='circle'?'circle':o.type==='text'?'text':'rectangle',x:o.x*sx,y:o.y*sy,w:o.w*sx,h:o.h*sy,color:o.color||'#79e2d0',text:o.text||'',solid:!!o.solid||['platform','solid','bounce','movingPlatform'].includes(o.behavior),vx:(o.vx||0)*sx,vy:(o.vy||0)*sy,angle:o.angle||0,pixels:Array.isArray(o.pixelData)?o.pixelData:[],behaviors:(behaviorMap[o.behavior]?[{id:'b-'+o.id,...behaviorMap[o.behavior]}]:[])}));
  const rules=(source.actions||[]).map(a=>({target:String(a.target??a.objectId??objects[0]?.id??''),trigger:a.trigger||'start',action:a.action||'moveX',value:Number(a.value)||0}));
  return {name:source.name,bg:source.background||'#e7edf6',objects,rules};
 }
