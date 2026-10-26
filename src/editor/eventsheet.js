@@ -33,21 +33,6 @@ export function initEventSheet(rootEl, store) {
     return select;
   }
 
-  function paramRow(registry, item, onChange, extraClass = '') {
-    const def = registry[item.type];
-    const fields = def ? def.fields : [];
-    return el('div', { class: `event-row ${extraClass}` }, [
-      registrySelect(registry, item.kind === 'trigger' ? TRIGGER_ORDER : item.registryOrder, item.type, (type) => {
-        onChange({ ...item, type, params: paramsFor(item.kind, type) });
-      }),
-      ...fields.map((field) =>
-        inlineField(field, item.params?.[field.key], (value) =>
-          onChange({ ...item, params: { ...(item.params || {}), [field.key]: value } }),
-        ),
-      ),
-    ]);
-  }
-
   function addRowButtons(event) {
     const addCondition = el('button', { class: 'btn tiny', text: '+ Condition' });
     addCondition.addEventListener('click', () => {
