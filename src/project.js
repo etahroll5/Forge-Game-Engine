@@ -314,46 +314,101 @@ export function removeBehavior(node, index) {
 // ---------------------------------------------------------------------------
 // Import normalisation — tolerant of hand-edited JSON, strict about shape
 // ---------------------------------------------------------------------------
-export function normalizeNode(raw) {
+export function normalizeNode(raw, ctx) {
+  const state = ctx || { depth: 0, count: { value: 0 } };
   const type = raw && NODE_TYPES[raw.type] ? raw.type : 'rect';
   const node = createNode(type, {});
-  Object.assign(node, raw || {});
-  node.type = type;
-  node.id = raw?.id || node.id;
-  node.name = String(raw?.name || NODE_TYPES[type].label);
-  node.children = Array.isArray(raw?.children) ? raw.children.map(normalizeNode) : [];
-  node.behaviors = Array.isArray(raw?.behaviors)
-    ? raw.behaviors.filter((b) => b && BEHAVIORS[b.type]).map((b) => ({ ...clone(BEHAVIORS[b.type].defaults || {}), ...b }))
-    : [];
-  node.script = typeof raw?.script === 'string' ? raw.script : '';
-  node.tags = typeof raw?.tags === 'string' ? raw.tags : '';
-  for (const key of ['x', 'y', 'rotation', 'scaleX', 'scaleY']) {
-    const n = Number(node[key]);
-    node[key] = Number.isFinite(n) ? n : key.startsWith('scale') ? 1 : 0;
+  state.count.value += 1;
+
+  // Copy own primitive properties only. `Object.assign(node, raw)` (what this
+  // used to do) routes `__proto__` through the inherited setter and silently
+  // swaps the prototype of the node instead of storing a field.
+  for (const [key, value] of Object.entries(raw || {})) {
+    if (isUnsafeKey(key)) continue;
+    const kind = typeof value;
+    if (kind === 'string' || kind === 'boolean' || (kind === 'number' && Number.isFinite(value))) {
+      node[key] = value;
+    }
   }
+
+  node.type = type;
+  node.id = str(raw?.id, node.id);
+  node.name = str(raw?.name, NODE_TYPES[type].label);
+
+  node.children = [];
+  if (Array.isArray(raw?.children) && state.depth < LIMITS.nodeDepth) {
+    const childState = { depth: state.depth + 1, count: state.count };
+    for (const child of raw.children) {
+      if (state.count.value >= LIMITS.nodesPerScene) break;
+      node.children.push(normalizeNode(child, childState));
+    }
+  }
+
+  node.behaviors = Array.isArray(raw?.behaviors)
+    ? raw.behaviors
+        .filter((b) => b && typeof b.type === 'string' && Object.hasOwn(BEHAVIORS, b.type))
+        .slice(0, 32)
+        .map((b) => ({ ...clone(BEHAVIORS[b.type].defaults || {}), ...sanitizeRecord(b), type: b.type }))
+    : [];
+
+  node.script = str(raw?.script, '', LIMITS.scriptLength);
+  node.tags = str(raw?.tags, '', LIMITS.textLength);
+  applyNumericBounds(node);
   return node;
+}
+
+export function normalizeAssets(raw) {
+  const out = {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  let kept = 0;
+  for (const [key, value] of Object.entries(raw)) {
+    if (kept >= LIMITS.assets) break;
+    if (isUnsafeKey(key)) continue;
+    const id = str(value?.id, key);
+    if (!id || isUnsafeKey(id)) continue;
+    const dataUrl = typeof value?.dataUrl === 'string' ? value.dataUrl : '';
+    if (!ASSET_DATA_URL.test(dataUrl) || dataUrl.length > LIMITS.assetBytes) continue;
+    out[id] = {
+      id,
+      name: str(value?.name, 'image'),
+      dataUrl,
+      w: boundedNumber(value?.w, 0, 0, LIMITS.coord),
+      h: boundedNumber(value?.h, 0, 0, LIMITS.coord),
+    };
+    kept += 1;
+  }
+  return out;
 }
 
 export function normalizeProject(raw) {
   if (!raw || typeof raw !== 'object') throw new Error('Project JSON must be an object');
   if (!Array.isArray(raw.scenes) || raw.scenes.length === 0) throw new Error('Project needs at least one scene');
 
+  const settings = { grid: 20, showGrid: true, snap: false, ...sanitizeRecord(raw.settings, { maxKeys: 32 }) };
+  settings.grid = boundedNumber(settings.grid, 20, 1, 1000);
+  settings.showGrid = settings.showGrid !== false;
+  settings.snap = settings.snap === true;
+
   const project = {
-    name: String(raw.name || 'Imported Game'),
+    name: str(raw.name, 'Imported Game'),
     version: VERSION,
-    assets: raw.assets && typeof raw.assets === 'object' ? raw.assets : {},
-    settings: { grid: 20, showGrid: true, snap: false, ...(raw.settings || {}) },
-    scenes: raw.scenes.map((scene, i) => {
-      const base = createScene(scene?.name || `Scene ${i + 1}`);
+    assets: normalizeAssets(raw.assets),
+    settings,
+    scenes: raw.scenes.slice(0, LIMITS.scenes).map((scene, i) => {
+      const base = createScene(str(scene?.name, `Scene ${i + 1}`));
       return {
         ...base,
-        name: String(scene?.name || base.name),
-        width: Number(scene?.width) > 0 ? Math.round(Number(scene.width)) : base.width,
-        height: Number(scene?.height) > 0 ? Math.round(Number(scene.height)) : base.height,
-        bg: typeof scene?.bg === 'string' ? scene.bg : base.bg,
-        nodes: Array.isArray(scene?.nodes) ? scene.nodes.map(normalizeNode) : [],
-        events: Array.isArray(scene?.events) ? scene.events.map(normalizeEvent) : [],
-        vars: scene?.vars && typeof scene.vars === 'object' ? scene.vars : {},
+        name: str(scene?.name, base.name),
+        width: boundedNumber(scene?.width, base.width, 1, LIMITS.sceneSize),
+        height: boundedNumber(scene?.height, base.height, 1, LIMITS.sceneSize),
+        bg: str(scene?.bg, base.bg),
+        nodes: Array.isArray(scene?.nodes)
+          ? scene.nodes.slice(0, LIMITS.nodesPerScene).map((node) => normalizeNode(node))
+          : [],
+        events: Array.isArray(scene?.events)
+          ? scene.events.slice(0, LIMITS.eventsPerScene).map(normalizeEvent)
+          : [],
+        vars: sanitizeRecord(scene?.vars, { maxKeys: LIMITS.vars }),
       };
     }),
   };
@@ -363,15 +418,19 @@ export function normalizeProject(raw) {
 export function normalizeEvent(raw) {
   const base = createEvent();
   const event = {
-    id: raw?.id || base.id,
+    id: str(raw?.id, base.id),
     enabled: raw?.enabled !== false,
-    trigger: typeof raw?.trigger === 'string' ? raw.trigger : 'tick',
-    triggerParams: raw?.triggerParams && typeof raw.triggerParams === 'object' ? raw.triggerParams : {},
+    trigger: str(raw?.trigger, 'tick'),
+    triggerParams: sanitizeRecord(raw?.triggerParams, { maxKeys: 32 }),
     conditions: Array.isArray(raw?.conditions)
-      ? raw.conditions.map((c) => ({ id: c?.id || uid('cd'), type: c?.type, params: c?.params || {} }))
+      ? raw.conditions
+          .slice(0, LIMITS.conditionsPerEvent)
+          .map((c) => ({ id: str(c?.id, uid('cd')), type: str(c?.type, ''), params: sanitizeRecord(c?.params) }))
       : [],
     actions: Array.isArray(raw?.actions)
-      ? raw.actions.map((a) => ({ id: a?.id || uid('ac'), type: a?.type, params: a?.params || {} }))
+      ? raw.actions
+          .slice(0, LIMITS.actionsPerEvent)
+          .map((a) => ({ id: str(a?.id, uid('ac')), type: str(a?.type, ''), params: sanitizeRecord(a?.params) }))
       : [],
   };
   return event;
