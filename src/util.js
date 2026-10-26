@@ -33,14 +33,19 @@ export function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-/** Tiny hyper-script DOM builder: el('div', {class:'x', on:{click:fn}}, [child]) */
+/**
+ * Tiny hyper-script DOM builder: el('div', {class:'x', on:{click:fn}}, [child])
+ *
+ * Deliberately has no `innerHTML` escape hatch: every string goes through
+ * textContent / createTextNode, so project data (node names, scene names,
+ * asset names, imported JSON) can never be parsed as markup.
+ */
 export function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
     if (v === null || v === undefined || v === false) continue;
     if (k === 'class') node.className = v;
     else if (k === 'text') node.textContent = v;
-    else if (k === 'html') node.innerHTML = v;
     else if (k === 'style' && typeof v === 'object') Object.assign(node.style, v);
     else if (k === 'dataset') Object.assign(node.dataset, v);
     else if (k === 'on' && typeof v === 'object') {
