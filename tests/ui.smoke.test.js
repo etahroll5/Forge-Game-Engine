@@ -83,7 +83,7 @@ test('editor UI smoke suite', { skip }, async (t) => {
     assert.equal(document.querySelectorAll('.behavior-item').length, 1, 'platformer behavior is listed');
     assert.ok(document.querySelector('textarea'), 'script editor is present');
 
-    const xInput = document.querySelector('input[data-field="x"]');
+    const xInput = document.querySelector('#inspector input[data-field="x"]');
     assert.ok(xInput, 'transform X field exists');
     xInput.value = '333';
     xInput.dispatchEvent(new window.Event('change'));
@@ -123,6 +123,7 @@ test('editor UI smoke suite', { skip }, async (t) => {
   });
 
   await t.test('play mode starts the runtime and stop returns to editing', async () => {
+    store.setScene(store.project.scenes[0].id); // scene 0 is the demo platformer
     document.getElementById('btn-play').dispatchEvent(new window.Event('click'));
     await new Promise((resolve) => setTimeout(resolve, 120));
 
