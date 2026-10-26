@@ -9,11 +9,13 @@ import { getImage } from './images.js';
 export function flatten(scene) {
   const out = [];
   const walk = (def, parent) => {
+    const psx = parent ? Math.abs(parent.wsx ?? 1) : 1;
+    const psy = parent ? Math.abs(parent.wsy ?? 1) : 1;
     const inst = {
       def,
       parent,
-      wx: (def.x || 0) + (parent ? parent.wx : 0),
-      wy: (def.y || 0) + (parent ? parent.wy : 0),
+      wx: (def.x || 0) * psx + (parent ? parent.wx : 0),
+      wy: (def.y || 0) * psy + (parent ? parent.wy : 0),
       wrot: (def.rotation || 0) + (parent ? parent.wrot : 0),
       wsx: (def.scaleX ?? 1) * (parent ? parent.wsx : 1),
       wsy: (def.scaleY ?? 1) * (parent ? parent.wsy : 1),
@@ -149,9 +151,8 @@ export function drawInstances(ctx, instances, project, opts = {}) {
     if (d.type === 'circle') {
       const rx = Math.max(0.5, w / 2);
       const ry = Math.max(0.5, h / 2);
-      const wobble = inst.spinOffset ? 0 : 0;
       ctx.beginPath();
-      ctx.ellipse(0, 0, rx + wobble, ry, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
       ctx.fillStyle = d.color || '#fbbf24';
       ctx.fill();
       if (opts.editor) {
