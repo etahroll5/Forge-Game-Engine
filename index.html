@@ -164,4 +164,30 @@ let pixels=Array(16*16).fill(null),pixelDrawing=false;const pc=$('#pixelCanvas')
 function seedProject(){project={version:3,name:'My Forge Game',width:960,height:540,background:'#e7edf6',objs:[],actions:[],script:'',dialogues:[],quests:[],localization:{en:{},es:{},fr:{},nl:{},de:{}},locale:'en',inputMap:{left:'ArrowLeft',right:'ArrowRight',jump:'ArrowUp'},accessibility:{reducedMotion:false,textScale:1},navPath:[]};project.objs.push(makeObject('rect',90,370));project.objs[0].name='Player';project.objs[0].behavior='platformer';project.objs[0].solid=false;project.objs.push(makeObject('rect',0,470));project.objs[1].name='Ground';project.objs[1].w=960;project.objs[1].h=70;project.objs[1].color='#34435a';project.objs[1].behavior='platform';project.objs[1].solid=true;project.objs.push(makeObject('rect',360,390));project.objs[2].name='Platform';project.objs[2].w=180;project.objs[2].h=22;project.objs[2].behavior='platform';project.objs[2].solid=true;selectedId=project.objs[0].id;commitChange()}async function boot(){let restored=false;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(d&&Array.isArray(d.objs)){applyProject(d);restored=true}}catch(e){setStatus('Checking browser database…')}if(!restored){try{const fallback=await loadProjectFromIndexedDB();if(fallback?.project&&Array.isArray(fallback.project.objs)){applyProject(fallback.project);restored=true;setStatus('Recovered autosave from browser database')}}catch(e){setStatus('Browser storage restricted — JSON export/import still works')}}if(!restored)seedProject();draw();renderObjects();renderInspector();renderEvents();drawPixel();updateHistoryButtons()}
 boot().then(()=>showHome());
 </script>
+<script>
+/* Fallback navigation for editor sidebar tabs, independent of the main app's setup sequence. */
+document.addEventListener('click', function(event) {
+  const tab = event.target.closest('.tabs button[data-page]');
+  if (!tab) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const name = tab.getAttribute('data-page');
+  document.querySelectorAll('.tabs button[data-page]').forEach(function(button) {
+    button.classList.toggle('active', button === tab);
+  });
+  ['scenePage', 'eventsPage', 'scriptPage', 'toolsPage'].forEach(function(id) {
+    const panel = document.getElementById(id);
+    if (panel) {
+      panel.style.display = id === name ? 'block' : 'none';
+      panel.classList.toggle('active', id === name);
+    }
+  });
+  if (name === 'eventsPage' && typeof renderEvents === 'function') {
+    try { renderEvents(); } catch (error) { console.error('Events panel:', error); }
+  }
+  if (name === 'toolsPage' && typeof renderForgeTools === 'function') {
+    try { renderForgeTools(); } catch (error) { console.error('1.0 Tools panel:', error); }
+  }
+}, true);
+</script>
 </body></html>
