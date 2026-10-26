@@ -335,16 +335,6 @@ test('demo project references only existing nodes and variables', () => {
         if (condition.params?.node) assert.ok(names.has(condition.params.node), `condition references missing node ${condition.params.node}`);
       }
     }
-
-    for (const event of scene.events) {
-      engineActionTypes(event).forEach((type) => {
-        assert.ok(!type, 'noop');
-      });
-    }
-  }
-
-  function engineActionTypes() {
-    return [];
   }
 
   // camera follow target must exist as well
