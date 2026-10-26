@@ -131,5 +131,6 @@ test('static server hardening', async (t) => {
     assert.match(res.headers['content-security-policy'], /default-src 'self'/);
   });
 
-  server.close();
+  await new Promise((resolve) => server.close(resolve));
+  await fs.unlink(socketPath).catch(() => {});
 });
