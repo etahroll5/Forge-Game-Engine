@@ -152,7 +152,6 @@ export function initViewport(canvas, store, options = {}) {
       startY: node.y,
       startWorld: world,
       moved: false,
-      batchStarted: false,
       pointerId: e.pointerId,
     };
     canvas.style.cursor = 'grabbing';
@@ -184,7 +183,6 @@ export function initViewport(canvas, store, options = {}) {
       if (!drag.moved && (nextX !== drag.startX || nextY !== drag.startY)) {
         // Only open an undo entry once the node really moves.
         store.beginBatch();
-        drag.batchStarted = true;
         drag.moved = true;
       }
       if (!drag.moved) return;
