@@ -9,7 +9,7 @@
 // the first place; the checks below are defence in depth for local `npm start`.
 
 import { createServer } from 'node:http';
-import { createReadStream, promises as fs } from 'node:fs';
+import { createReadStream, promises as fs, realpathSync } from 'node:fs';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -40,6 +40,13 @@ const MIME = {
 // 'unsafe-eval' is required for script-src. Everything else stays locked to the
 // origin: no remote script/style/frame injection, no `javascript:` URLs, no
 // base-tag or form hijacking.
+//
+// Framing: the editor must be embeddable by the hosting console (which frames
+// the deployment over https), so `frame-ancestors` allows same-origin plus
+// https parents instead of 'none'. That still blocks clickjacking from plain
+// http, `data:` and `file:` origins. The legacy `X-Frame-Options` header is
+// deliberately omitted: it cannot express an allow-list ('ALLOW-FROM' is dead)
+// and modern browsers ignore it whenever frame-ancestors is present.
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-eval'",
@@ -51,13 +58,12 @@ const CSP = [
   "object-src 'none'",
   "base-uri 'none'",
   "form-action 'none'",
-  "frame-ancestors 'none'",
+  "frame-ancestors 'self' https:",
 ].join('; ');
 
 const SECURITY_HEADERS = {
   'content-security-policy': CSP,
   'x-content-type-options': 'nosniff',
-  'x-frame-options': 'DENY',
   'referrer-policy': 'no-referrer',
   'cross-origin-opener-policy': 'same-origin',
   'permissions-policy': 'geolocation=(), camera=(), microphone=(), payment=()',
