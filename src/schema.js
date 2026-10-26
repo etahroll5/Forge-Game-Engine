@@ -115,8 +115,6 @@ export const NODE_TYPES = {
       f('follow', 'Follow node', 'node'),
       f('zoom', 'Zoom', 'number', { min: 0.1, max: 6, step: 0.05 }),
       f('smoothing', 'Smoothing', 'number', { min: 0, max: 1, step: 0.01 }),
-      f('x', 'Start X', 'number', { step: 1 }),
-      f('y', 'Start Y', 'number', { step: 1 }),
     ],
   },
 };

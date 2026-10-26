@@ -55,6 +55,13 @@ export function pointInInst(inst, x, y) {
     const r = 14;
     return Math.abs(x - inst.wx) < r && Math.abs(y - inst.wy) < r;
   }
+  if (d.type === 'text') {
+    // Text nodes have no explicit box — approximate the rendered label.
+    const fs = (d.fontSize || 16) * Math.abs(inst.wsy ?? 1);
+    const w = Math.max(28, String(d.text || '').length * fs * 0.55);
+    const h = Math.max(18, fs * 1.35);
+    return Math.abs(x - inst.wx) <= w / 2 && Math.abs(y - inst.wy) <= h / 2;
+  }
   const { hw, hh } = halfExtents(inst);
   return x >= inst.wx - hw && x <= inst.wx + hw && y >= inst.wy - hh && y <= inst.wy + hh;
 }
@@ -196,7 +203,7 @@ export function drawInstances(ctx, instances, project, opts = {}) {
 export function drawStageGuides(ctx, scene, opts = {}) {
   const zoom = opts.zoom || 1;
   if (opts.grid) {
-    const step = Math.max(4, scene.grid || 20);
+    const step = Math.max(4, opts.step || 20);
     ctx.save();
     ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
     ctx.lineWidth = 1 / zoom;
