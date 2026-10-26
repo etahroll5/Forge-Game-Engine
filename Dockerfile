@@ -7,6 +7,7 @@ WORKDIR /app
 # package-lock.json, all of which the static server would then expose over HTTP.
 COPY index.html ./index.html
 COPY server.js ./server.js
+COPY package.json ./package.json
 COPY styles ./styles
 COPY src ./src
 
