@@ -183,9 +183,27 @@ export function createForgeServer() {
         return;
       }
 
+      // `stat` follows symlinks, so re-resolve the real path and re-check
+      // containment: a symlink committed into the tree must not smuggle a file
+      // from outside ROOT past the allow-surface checks above.
+      const realPath = await fs.realpath(filePath).catch(() => null);
+      if (!realPath || !isInsideRoot(realPath)) {
+        sendPlain(res, 404, '404 Not Found');
+        return;
+      }
+      if (isPrivatePath(relativeToRoot(realPath))) {
+        sendPlain(res, 404, '404 Not Found');
+        return;
+      }
+      stat = await fs.stat(realPath).catch(() => null);
+      if (!stat?.isFile()) {
+        sendPlain(res, 404, '404 Not Found');
+        return;
+      }
+
       res.writeHead(200, {
         ...SECURITY_HEADERS,
-        'content-type': MIME[extname(filePath).toLowerCase()] || 'application/octet-stream',
+        'content-type': MIME[extname(realPath).toLowerCase()] || 'application/octet-stream',
         'content-length': stat.size,
         'cache-control': 'no-cache',
       });
@@ -193,7 +211,19 @@ export function createForgeServer() {
         res.end();
         return;
       }
-      createReadStream(filePath).pipe(res);
+
+      // A read error after the headers are sent (file removed mid-request,
+      // EACCES, EISDIR) must not surface as an unhandled 'error' event, which
+      // would kill the process over one bad request. Destroy the response
+      // instead: the client sees a truncated body, the server keeps running.
+      const stream = createReadStream(realPath);
+      stream.on('error', (err) => {
+        console.error('Read failed:', err?.message || err);
+        stream.destroy();
+        if (!res.writableEnded) res.destroy();
+      });
+      res.on('close', () => stream.destroy());
+      stream.pipe(res);
     } catch (err) {
       // Log details server-side; never reflect internals to the client.
       console.error('Request failed:', err?.message || err);
