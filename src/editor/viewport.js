@@ -1,7 +1,7 @@
 // Editor viewport: pan/zoom, stage guides, click selection and drag-to-move.
 
 import { el, clear, clamp, num } from '../util.js';
-import { flatten, drawInstances, drawStageGuides, drawSelection, hitTest, halfExtents } from '../render.js';
+import { flatten, drawInstances, drawStageGuides, drawSelection, hitTest } from '../render.js';
 import { findEntry } from '../project.js';
 
 export function initViewport(canvas, store, options = {}) {
@@ -208,13 +208,8 @@ export function initViewport(canvas, store, options = {}) {
     }
     if (drag) {
       const moved = drag.moved;
-      const node = drag.node;
-      if (moved) {
-        // Record the final position inside the batch that started on pointerdown.
-        store.type('drag');
-      }
       drag = null;
-      if (moved) store.commit('move node', () => { node._touched = true; });
+      if (moved) store.type('drag'); // batch already owns the pre-drag snapshot
       render();
     }
   }
