@@ -83,7 +83,7 @@ export function initViewport(canvas, store, options = {}) {
     // stage
     ctx.fillStyle = scene.bg || '#0b1020';
     ctx.fillRect(0, 0, scene.width, scene.height);
-    drawStageGuides(ctx, scene, { grid: store.project.settings.showGrid, zoom: s });
+    drawStageGuides(ctx, scene, { grid: store.project.settings.showGrid, zoom: s, step: store.project.settings.grid });
 
     drawInstances(ctx, instances, store.project, { editor: true, zoom: s });
 
@@ -155,7 +155,6 @@ export function initViewport(canvas, store, options = {}) {
     const node = hit.def;
     const parentEntry = findEntry(scene().nodes, node.id);
     const parentInst = parentEntry?.parent ? instById.get(parentEntry.parent.id) : null;
-    store.beginBatch();
     drag = {
       node,
       parentInst,
@@ -163,6 +162,7 @@ export function initViewport(canvas, store, options = {}) {
       startY: node.y,
       startWorld: world,
       moved: false,
+      batchStarted: false,
       pointerId: e.pointerId,
     };
     canvas.style.cursor = 'grabbing';
