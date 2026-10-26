@@ -167,6 +167,24 @@ test('editor UI smoke suite', { skip }, async (t) => {
     assert.equal(scene.nodes.length, count - 1, 'Delete removes the selected node');
   });
 
+  await t.test('editing shortcuts are inert while the game is playing', async () => {
+    store.setScene(store.project.scenes[0].id);
+    const before = store.scene().nodes.length;
+    store.select(store.scene().nodes[0].id);
+
+    document.getElementById('btn-play').dispatchEvent(new window.Event('click'));
+    await new Promise((resolve) => setTimeout(resolve, 60));
+
+    window.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
+    window.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'd', ctrlKey: true, bubbles: true }));
+    assert.equal(store.scene().nodes.length, before, 'play mode must not delete or duplicate editor nodes');
+    assert.equal(store.canUndo(), true, 'play mode must not push history entries');
+
+    document.getElementById('btn-stop').dispatchEvent(new window.Event('click'));
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    assert.equal(store.scene().nodes.length, before);
+  });
+
   // Tear the jsdom window down so pending timers/frames do not keep node alive.
   if (window.appjet.engine) document.getElementById('btn-stop').dispatchEvent(new window.Event('click'));
   window.close();
