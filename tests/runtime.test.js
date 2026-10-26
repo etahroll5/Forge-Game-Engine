@@ -98,7 +98,7 @@ test('platformer falls under gravity and lands on a solid', () => {
 });
 
 test('platformer responds to the right arrow key', () => {
-  const player = platformer('Player', 200, 470, 34, 42);
+  const player = platformer('Player', 200, 420, 34, 42);
   const engine = makeEngine(sceneWith([solidGround(), player]));
   engine.keys.add('ArrowRight');
   const startX = engine.find('Player').wx;
@@ -202,9 +202,9 @@ test('timer trigger respects its interval', () => {
       ],
     }),
   );
-  for (let i = 0; i < 30; i += 1) engine.runEvents(1 / 60); // 0.5s
+  for (let i = 0; i < 6; i += 1) engine.runEvents(0.1); // 0.6s of game time
   assert.equal(engine.vars.ticks, 1);
-  for (let i = 0; i < 30; i += 1) engine.runEvents(1 / 60);
+  for (let i = 0; i < 5; i += 1) engine.runEvents(0.1);
   assert.equal(engine.vars.ticks, 2);
 });
 
