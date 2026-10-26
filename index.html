@@ -720,4 +720,45 @@ label,.muted,.small{color:#c7bfdc}
 .forgeUpdatesEra h3{font-size:24px;letter-spacing:-.04em;color:#fff;margin:8px 0 6px}
 .forgeUpdatesEra p{margin:0;color:#c5b7d9!important}
 .forgeUpdatesEraLive{background:linear-gradient(115deg,#4b2c7b,#241632);border-color:#9263d2}
+
+/* Forge Studio: match the miniature purple editor on the Updates page */
+body:has(.workspace:not(.homeMode)){background:#120d1b}
+body:has(.workspace:not(.homeMode))>.topbar{background:#2c213b!important;border-bottom:1px solid #513e68!important;box-shadow:0 2px 14px #09061288!important;min-height:49px}
+body:has(.workspace:not(.homeMode))>.topbar .brand{color:#e9d8ff!important;letter-spacing:-.055em}
+body:has(.workspace:not(.homeMode))>.topbar button{border-color:#5a446f!important;background:#372747!important;color:#eadbff!important}
+body:has(.workspace:not(.homeMode))>.topbar button.primary{background:#7952d0!important;border-color:#a87af8!important}
+.workspace:not(.homeMode){grid-template-columns:49px minmax(205px,230px) minmax(320px,1fr) minmax(215px,245px)!important;background:#141021!important;gap:0!important}
+.workspace:not(.homeMode) #forgeToolRail{background:#21192d!important;border-right:1px solid #443451!important;box-shadow:inset -1px 0 #150f20;grid-column:1!important;grid-row:1!important;padding-top:12px!important}
+.workspace:not(.homeMode) #forgeToolRail .railBrand{background:#8054d3!important;color:#fff!important;border:1px solid #b28cff!important;box-shadow:0 0 16px #8c61f044}
+.workspace:not(.homeMode) #forgeToolRail button{color:#c7a6ff!important;border:1px solid transparent!important;border-radius:9px!important;background:transparent!important;min-height:35px}
+.workspace:not(.homeMode) #forgeToolRail button:hover,.workspace:not(.homeMode) #forgeToolRail button:focus-visible{background:#4a326b!important;border-color:#7d5aa7!important;color:#fff!important}
+.workspace:not(.homeMode) .sidebar.left{grid-column:2!important;grid-row:1!important;background:#21192d!important;border-right:1px solid #443451!important;border-left:0!important;box-shadow:none!important}
+.workspace:not(.homeMode) .sidebar.right{grid-column:4!important;grid-row:1!important;display:block!important;background:#21192d!important;border-left:1px solid #443451!important;box-shadow:none!important}
+.workspace:not(.homeMode) .center{grid-column:3!important;grid-row:1!important;min-width:0!important;background:#141021!important}
+.workspace:not(.homeMode) .sideHead,.workspace:not(.homeMode) .panelHead{background:#2c213b!important;color:#e7d4ff!important;border-color:#49365f!important;font-size:11px!important;font-weight:800!important;letter-spacing:.08em!important}
+.workspace:not(.homeMode) .sidebar .tabs{background:#21192d!important;border-color:#49365f!important}
+.workspace:not(.homeMode) .sidebar .tab{background:transparent!important;color:#bfa9db!important}
+.workspace:not(.homeMode) .sidebar .tab.active{background:#503577!important;color:#fff!important;border-color:#a27bda!important}
+.workspace:not(.homeMode) .sidebar .sideBlock,.workspace:not(.homeMode) .sidebar .section{background:transparent!important;border-color:#433353!important}
+.workspace:not(.homeMode) .sidebar button:not(.tab){background:#332641!important;border-color:#5a446f!important;color:#e9d9ff!important;border-radius:7px!important}
+.workspace:not(.homeMode) .sidebar button.primary{background:#744bbf!important;border-color:#ad82ef!important}
+.workspace:not(.homeMode) #objectList>*{border-color:#4e3a65!important;color:#e7d6fa!important}
+.workspace:not(.homeMode) #inspector{color:#e8dcf5!important}
+.workspace:not(.homeMode) #inspectorPanel input,.workspace:not(.homeMode) #inspectorPanel select,.workspace:not(.homeMode) .sidebar.left input,.workspace:not(.homeMode) .sidebar.left select{background:#171120!important;border-color:#59446f!important;color:#f1e7ff!important;border-radius:7px!important}
+.workspace:not(.homeMode) #editorToolbar{background:#2c213b!important;border-bottom:1px solid #513e68!important;min-height:51px!important}
+.workspace:not(.homeMode) #editorToolbar .workspaceTabs{background:#21192d!important;border:1px solid #4c385f!important;border-radius:9px!important;padding:3px!important;gap:2px!important}
+.workspace:not(.homeMode) #editorToolbar .workspaceTab{border-radius:7px!important;color:#c5addf!important;background:transparent!important}
+.workspace:not(.homeMode) #editorToolbar .workspaceTab.active{background:#60408d!important;color:#fff!important;box-shadow:0 2px 8px #0b061b55}
+.workspace:not(.homeMode) #editorToolbar button:not(.workspaceTab){background:#392947!important;color:#e9d8ff!important;border-color:#604c75!important}
+.workspace:not(.homeMode) #editorToolbar button.primary{background:#7952d0!important;border-color:#ad85f0!important}
+.workspace:not(.homeMode) #forgeSceneBar{background:#21192d!important;border-bottom:1px solid #443451!important;color:#e4d4f7!important}
+.workspace:not(.homeMode) #forgeSceneBar button,.workspace:not(.homeMode) #forgeSceneBar select{background:#332641!important;border:1px solid #59446f!important;color:#eee1ff!important;border-radius:7px!important}
+.workspace:not(.homeMode) #sceneWorkspace .stage{background-color:#141021!important;background-image:radial-gradient(#4a365d 1px,transparent 1px)!important;background-size:15px 15px!important;padding:20px!important}
+.workspace:not(.homeMode) #sceneWorkspace .canvasWrap{border:1px solid #7955ad!important;border-radius:10px!important;background:#161020!important;box-shadow:0 16px 45px #090413aa,0 0 0 5px #7451a10d!important}
+.workspace:not(.homeMode) #sceneWorkspace canvas#scene{background:#141021!important}
+.workspace:not(.homeMode) #sceneWorkspace .bottom{background:#21192d!important;border-top:1px solid #443451!important;color:#c7b4dc!important}
+.workspace:not(.homeMode) #eventsWorkspace,.workspace:not(.homeMode) #scriptWorkspace,.workspace:not(.homeMode) #toolsWorkspace{background:#171121!important}
+.workspace:not(.homeMode) .eventRow{background:#251a35!important;border-color:#5b4178!important}
+@media(max-width:1120px){.workspace:not(.homeMode){grid-template-columns:46px 205px minmax(270px,1fr)!important}.workspace:not(.homeMode) .sidebar.right{display:none!important}}
+@media(max-width:760px){.workspace:not(.homeMode){grid-template-columns:44px minmax(220px,1fr)!important}.workspace:not(.homeMode) .sidebar.left{display:none!important}}
 </style><script defer src="./creator-lab-2.js"></script><script defer src="./scene-camera.js"></script><script>document.getElementById('releaseOpenEditor')?.addEventListener('click',()=>document.getElementById('homeContinue')?.click());</script><script>(function(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(button=>{button.addEventListener('click',()=>{const target=document.getElementById(button.dataset.rail);if(target&&!target.disabled)target.click()})});function refreshRail(){document.querySelectorAll('#forgeToolRail [data-rail]').forEach(b=>b.classList.toggle('railActive',document.getElementById(b.dataset.rail)?.classList.contains('active')||false))}document.getElementById('forgeToolRail')?.addEventListener('click',refreshRail);document.querySelectorAll('.workspaceTab').forEach(b=>b.addEventListener('click',refreshRail));refreshRail()})();</script><script defer src="./event-picker.js"></script><script>document.getElementById('forgeUpdatesJump')?.addEventListener('click',()=>document.getElementById('forgeUpdatesHistory')?.scrollIntoView({behavior:'smooth',block:'start'}));</script></body></html>
