@@ -89,6 +89,29 @@ function isPrivatePath(relPath) {
   return PRIVATE_FILES.has(last.toLowerCase());
 }
 
+// ROOT with symlinks resolved (macOS /var -> /private/var, container bind
+// mounts), memoised because it cannot change while the process lives.
+let realRootCache = null;
+function realRoot() {
+  if (realRootCache === null) {
+    try {
+      realRootCache = realpathSync(ROOT);
+    } catch {
+      realRootCache = ROOT;
+    }
+  }
+  return realRootCache;
+}
+
+function isInsideRoot(absolutePath) {
+  const root = realRoot();
+  return absolutePath === root || absolutePath.startsWith(root + sep);
+}
+
+function relativeToRoot(absolutePath) {
+  return absolutePath.slice(realRoot().length).split(sep).join('/');
+}
+
 /**
  * Resolve a request URL to a file inside ROOT, or null when the request must
  * not be served (traversal, dotfile, private file, malformed encoding).
