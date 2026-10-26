@@ -189,9 +189,17 @@ export function initViewport(canvas, store, options = {}) {
       const psy = drag.parentInst ? Math.abs(drag.parentInst.wsy || 1) : 1;
       const dx = (world.x - drag.startWorld.x) / psx;
       const dy = (world.y - drag.startWorld.y) / psy;
-      drag.node.x = snapValue(drag.startX + dx);
-      drag.node.y = snapValue(drag.startY + dy);
-      drag.moved = true;
+      const nextX = snapValue(drag.startX + dx);
+      const nextY = snapValue(drag.startY + dy);
+      if (!drag.moved && (nextX !== drag.startX || nextY !== drag.startY)) {
+        // Only open an undo entry once the node really moves.
+        store.beginBatch();
+        drag.batchStarted = true;
+        drag.moved = true;
+      }
+      if (!drag.moved) return;
+      drag.node.x = nextX;
+      drag.node.y = nextY;
       store.type('drag');
       render();
       return;
@@ -210,7 +218,7 @@ export function initViewport(canvas, store, options = {}) {
     if (drag) {
       const moved = drag.moved;
       drag = null;
-      if (moved) store.type('drag'); // batch already owns the pre-drag snapshot
+      if (moved) store.type('drag'); // the batch owns the pre-drag snapshot
       render();
     }
   }
