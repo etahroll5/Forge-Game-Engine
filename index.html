@@ -168,6 +168,13 @@ boot().then(()=>showHome());
 <script>
 /* Fallback navigation for editor sidebar tabs, independent of the main app's setup sequence. */
 document.addEventListener('click', function(event) {
+  const workspaceTab = event.target.closest('.workspaceTabs button[data-workspace]');
+  if (workspaceTab) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (typeof setWorkspace === 'function') setWorkspace(workspaceTab.getAttribute('data-workspace'));
+    return;
+  }
   const tab = event.target.closest('.tabs button[data-page]');
   if (!tab) return;
   event.preventDefault();
